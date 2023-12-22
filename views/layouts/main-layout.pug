@@ -1,0 +1,51 @@
+include ../mixins/mixins
+
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css" integrity="sha512-hvNR0F/e2J7zPPfLC9auFe3/SE0yG4aJCOd/qxew74NN7eyiSKjr7xJJMu1Jy2wf7FXITpWS1E/RY8yzuXN7VA==" crossorigin="anonymous" referrerpolicy="no-referrer")
+    link(href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN' crossorigin='anonymous')
+    title #{pageTitle}
+    link(rel="stylesheet", href="/css/main.css")
+    script(src="https://kit.fontawesome.com/bbcef5c9e6.js" crossorigin="anonymous")
+  body
+    script.
+      const userLoggedIn = !{userLoggedInJs}
+    .wrapper
+      .row
+        nav.col-2
+          a.blue(href="/")
+            i.fa-solid.fa-feather
+          a(href="/")
+            i.fa-solid.fa-house-chimney-user
+          a(href="/search")
+            i.fa-brands.fa-searchengin
+          a(href="/notifications")
+            i.fa-solid.fa-bell
+            span#notificationsBadge
+          a(href="/messages")
+            i.fa-solid.fa-envelope
+            span#messagesBadge
+          a(href="/profile")
+            i.fa-solid.fa-user
+          a(href="/logout")
+            i.fa-solid.fa-right-from-bracket
+        .mainSectionContainer.col-10.col-md-8.col-lg-6
+          .titleContainer
+            h1 #{pageTitle}
+            block headerButton
+          block content
+        .d-none.d-md-block.col-md-2.col-lg-4
+    #notificationsList
+    
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js" integrity="sha512-9KkIqdfN7ipEW6B6k+Aq20PV31bjODg4AA52W+tYtAE0jE0kMx49bjJ3FgvS56wzmyfMUHbQ4Km2b7l9+Y/+Eg==" crossorigin="anonymous" referrerpolicy="no-referrer")
+    script(src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js' integrity='sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL' crossorigin='anonymous')
+    script(src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous")
+    script(src="https://cdn.socket.io/4.7.2/socket.io.min.js")
+    
+    block scripts
+    
+    script(src="/js/common.js")
+    script(src="/js/clientSocket.js")
