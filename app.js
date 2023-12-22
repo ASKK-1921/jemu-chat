@@ -1,16 +1,17 @@
 const express = require('express');
+const bodyParser = require('body-parser');
+const path = require('path');
+const { Server } = require('socket.io');
+const session = require('express-session');
+const mongoose = require('./database');
+
 const app = express();
 const port = 3000;
-const path = require('path');
-const bodyParser = require('body-parser');
-const mongoose = require('./database');
-const session = require('express-session');
-const { Server } = require('socket.io');
 
 const middleware = require('./middleware');
 
 const server = app.listen(port, () => {
-  console.log(`Server listening on port ${port}`);
+	console.log(`Server listening on port ${port}`);
 });
 const io = new Server(server, { pingTimeout: 60000 });
 
@@ -21,11 +22,11 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(
-  session({
-    secret: 'Jessie and Mugi',
-    resave: true,
-    saveUninitialized: false,
-  })
+	session({
+		secret: 'Jessie and Mugi',
+		resave: true,
+		saveUninitialized: false,
+	})
 );
 
 // Routes
@@ -61,41 +62,41 @@ app.use('/api/messages', messagesApiRoutes);
 app.use('/api/notifications', notificationsApiRoutes);
 
 app.get('/', middleware.requireLogin, (req, res, next) => {
-  const payload = {
-    pageTitle: 'Home',
-    userLoggedIn: req.session.user,
-    userLoggedInJs: JSON.stringify(req.session.user),
-  };
-  res.status(200).render('home', payload);
+	const payload = {
+		pageTitle: 'Home',
+		userLoggedIn: req.session.user,
+		userLoggedInJs: JSON.stringify(req.session.user),
+	};
+	res.status(200).render('home', payload);
 });
 
 io.on('connection', (socket) => {
-  socket.on('setup', (userData) => {
-    socket.join(userData._id);
-    socket.emit('connected');
-  });
-  socket.on('join room', (room) => {
-    socket.join(room);
-  });
-  socket.on('typing', (room) => {
-    socket.in(room).emit('typing');
-  });
-  socket.on('stop typing', (room) => {
-    socket.in(room).emit('stop typing');
-  });
-  socket.on('notification received', (room) => {
-    socket.in(room).emit('notification received');
-  });
-  socket.on('new message', (newMessage) => {
-    const chat = newMessage.chat;
-    if (!chat.users) {
-      return console.log('Chat.users not defined');
-    }
-    chat.users.forEach((user) => {
-      if (user._id == newMessage.sender._id) {
-        return;
-      }
-      socket.in(user._id).emit('message received', newMessage);
-    });
-  });
+	socket.on('setup', (userData) => {
+		socket.join(userData._id);
+		socket.emit('connected');
+	});
+	socket.on('join room', (room) => {
+		socket.join(room);
+	});
+	socket.on('typing', (room) => {
+		socket.in(room).emit('typing');
+	});
+	socket.on('stop typing', (room) => {
+		socket.in(room).emit('stop typing');
+	});
+	socket.on('notification received', (room) => {
+		socket.in(room).emit('notification received');
+	});
+	socket.on('new message', (newMessage) => {
+		const { chat } = newMessage;
+		if (!chat.users) {
+			return console.log('Chat.users not defined');
+		}
+		chat.users.forEach((user) => {
+			if (user._id === newMessage.sender._id) {
+				return;
+			}
+			socket.in(user._id).emit('message received', newMessage);
+		});
+	});
 });

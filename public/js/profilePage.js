@@ -1,32 +1,32 @@
 $(document).ready(() => {
-  const isReply = selectedTab === 'replies';
-  loadContent(isReply);
+	const isReply = selectedTab === 'replies';
+	loadContent(isReply);
 });
 
 function loadContent(isReply) {
-  const url = '/api/posts';
+	const url = '/api/posts';
 
-  if (isReply == false) {
-    $.get(url, { postedBy: profileUserId, pinned: true }, (results) => {
-      outputPinnedPost(results, $('.pinnedPostContainer'));
-    });
-  }
+	if (isReply === false) {
+		$.get(url, { postedBy: profileUserId, pinned: true }, (results) => {
+			outputPinnedPost(results, $('.pinnedPostContainer'));
+		});
+	}
 
-  $.get(url, { postedBy: profileUserId, isReply: isReply }, (results) => {
-    outputPosts(results, $('.postsContainer'));
-  });
+	$.get(url, { postedBy: profileUserId, isReply: isReply }, (results) => {
+		outputPosts(results, $('.postsContainer'));
+	});
 }
 
 function outputPinnedPost(results, container) {
-  if (results.length == 0) {
-    container.hide();
-    return;
-  }
+	if (results.length === 0) {
+		container.hide();
+		return;
+	}
 
-  container.html('');
+	container.html('');
 
-  results.forEach((result) => {
-    const html = createPostHtml(result);
-    container.append(html);
-  });
+	results.forEach((result) => {
+		const html = createPostHtml(result);
+		container.append(html);
+	});
 }

@@ -1,11 +1,11 @@
 $(document).ready(() => {
-  // const dataType = selectedTab === 'followers';
-  // loadData(dataType);
-  const url = `/api/users/${profileUserId}/${selectedTab}`;
+	// const dataType = selectedTab === 'followers';
+	// loadData(dataType);
+	const url = `/api/users/${profileUserId}/${selectedTab}`;
 
-  $.get(url, (results) => {
-    outputUsers(results, $('.resultsContainer'));
-  });
+	$.get(url, (results) => {
+		outputUsers(results, $('.resultsContainer'));
+	});
 });
 
 // function loadContent(dataType) {

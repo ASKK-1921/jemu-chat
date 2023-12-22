@@ -1,48 +1,42 @@
 const mongoose = require('mongoose');
-const User = require('./userModel');
 
-const Schema = mongoose.Schema;
-
-const PostSchema = new Schema(
-  {
-    content: {
-      type: String,
-      trim: true,
-    },
-    postedBy: {
-      type: Schema.Types.ObjectId,
-      ref: 'User',
-    },
-    pinned: {
-      type: Boolean,
-    },
-    likes: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: 'User',
-      },
-    ],
-    retweetUsers: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: 'User',
-      },
-    ],
-    retweetData: {
-      type: Schema.Types.ObjectId,
-      ref: 'Post',
-    },
-    replyTo: {
-      type: Schema.Types.ObjectId,
-      ref: 'Post',
-    },
-    pinned: {
-      type: Boolean,
-    },
-  },
-  {
-    timestamps: true,
-  }
+const PostSchema = new mongoose.Schema(
+	{
+		content: {
+			type: String,
+			trim: true,
+		},
+		postedBy: {
+			type: mongoose.Schema.ObjectId,
+			ref: 'User',
+		},
+		pinned: {
+			type: Boolean,
+		},
+		likes: [
+			{
+				type: mongoose.Schema.ObjectId,
+				ref: 'User',
+			},
+		],
+		retweetUsers: [
+			{
+				type: mongoose.Schema.ObjectId,
+				ref: 'User',
+			},
+		],
+		retweetData: {
+			type: mongoose.Schema.ObjectId,
+			ref: 'Post',
+		},
+		replyTo: {
+			type: mongoose.Schema.ObjectId,
+			ref: 'Post',
+		},
+	},
+	{
+		timestamps: true,
+	}
 );
 
 const Post = mongoose.model('Post', PostSchema);

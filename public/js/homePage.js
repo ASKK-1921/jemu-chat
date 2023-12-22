@@ -1,7 +1,7 @@
 $('document').ready(() => {
-  const url = '/api/posts';
+	const url = '/api/posts';
 
-  $.get(url, { followingOnly: true }, (results) => {
-    outputPosts(results, $('.postsContainer'));
-  });
+	$.get(url, { followingOnly: true }, (results) => {
+		outputPosts(results, $('.postsContainer'));
+	});
 });
