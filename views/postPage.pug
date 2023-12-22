@@ -1,7 +1,7 @@
 extends layouts/main-layout.pug 
 
 block content
-  script.
+  script(nonce=nonce).
     var postId = '!{postId}'
   .postsContainer
   +postModals(userLoggedIn)

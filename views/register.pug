@@ -16,7 +16,7 @@ block content
       input(type="submit", value="Login")
     a(href="/login") Have an account? Login here.
 
-  script.
+  script(nonce=nonce).
     var passwordInput = document.getElementById("password");
     var confirmPasswordInput = document.getElementById("confirmPassword");
     var registerForm = document.getElementById("registerForm");

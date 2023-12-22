@@ -1,26 +1,112 @@
-const express = require('express');
-const bodyParser = require('body-parser');
+// Dependencies
+const crypto = require('crypto');
 const path = require('path');
-const { Server } = require('socket.io');
+const express = require('express');
+const mongoSanitize = require('express-mongo-sanitize');
+// const xss = require('xss-clean');
+// const cookieParser = require('cookie-parser');
 const session = require('express-session');
-const mongoose = require('./database');
-
-const app = express();
-const port = 3000;
-
+const morgan = require('morgan');
+const compression = require('compression');
+const rateLimit = require('express-rate-limit');
+const helmet = require('helmet');
+const hpp = require('hpp');
 const middleware = require('./middleware');
 
-const server = app.listen(port, () => {
-	console.log(`Server listening on port ${port}`);
+// Utilities
+const AppError = require('./system/utils/appError');
+// const languageManager = require('./system/utils/languageManager');
+
+// Routers
+const loginRouter = require('./routes/loginRoutes');
+const logoutRouter = require('./routes/logoutRoutes');
+const registerRouter = require('./routes/registerRoutes');
+const postRouter = require('./routes/postRoutes');
+const profileRouter = require('./routes/profileRoutes');
+const uploadRouter = require('./routes/uploadRoutes');
+const searchRouter = require('./routes/searchRoutes');
+const messagesRouter = require('./routes/messageRoutes');
+const notificationsRouter = require('./routes/notificationsRoutes');
+const postsApiRouter = require('./routes/api/postsApiRoutes');
+const usersApiRouter = require('./routes/api/usersApiRoutes');
+const chatsApiRouter = require('./routes/api/chatsApiRoutes');
+const messagesApiRouter = require('./routes/api/messagesApiRoutes');
+const notificationsApiRouter = require('./routes/api/notificationsApiRoutes');
+// const viewRouter = require('./system/routes/viewRoutes');
+// const adminRouter = require('./system/routes/adminRoutes');
+// const userRouter = require('./system/routes/userRoutes');
+// const utilsRouter = require('./system/routes/utilsRoutes');
+
+// Controllers
+const errorController = require('./system/controllers/errorController');
+
+// Initialise express
+const app = express();
+
+// If in production, catch unauthorised requests and kill them
+app.all('*', (req, res, next) => {
+	if (process.env.NODE_ENV === 'production') {
+		// Set strict whitelist of hosts that can access the system
+		const whitelist = ['localhost:3000'];
+
+		// Check if current host is whitelisted
+		if (whitelist.includes(req.headers.host)) {
+			// Redirect authorised www traffic to non-www
+			if (req.headers.host.match(/^www/) !== null) {
+				return res.redirect(`https://${req.headers.host.replace(/^www\./, '')}${req.url}`);
+			}
+			return next();
+		}
+
+		// UNAUTHORISED ACCESS DETECTED
+		// Uncomment the next line to log anuthorised requests
+		// console.log(`${req.method} ${req.originalUrl} blocked from ${req.headers.host}`);
+		// Kill the request
+		return res.status(403).end();
+	}
+	next();
 });
-const io = new Server(server, { pingTimeout: 60000 });
 
+// Set nonce to be used in requests for public js files
+app.use((req, res, next) => {
+	res.locals.nonce = crypto.randomBytes(16).toString('hex');
+	next();
+});
+
+// Set content security policy HTTP headers
+app.use(
+	helmet.contentSecurityPolicy({
+		directives: {
+			defaultSrc: ["'self'", 'https:', 'http:', 'data:', 'ws:', 'wss:', 'blob:'],
+			baseUri: ["'self'"],
+			fontSrc: ["'self'", 'https:', 'http:', 'data:'],
+			scriptSrc: ["'self'", (req, res) => `'nonce-${res.locals.nonce}'`, 'https:', 'http:', 'blob:'],
+			styleSrc: ["'self'", "'unsafe-inline'", 'https:', 'http:'],
+		},
+	})
+);
+
+// Prevent use of system in iframe
+app.use(helmet.frameguard({ action: 'deny' }));
+
+// Prevent mime-based attacks
+app.use(helmet.noSniff());
+
+// Tell browsers that this site should only be access with HTTPS
+app.use(helmet.hsts({ maxAge: 63072000, includeSubDomains: true }));
+
+// Disable x-powered to avoid sending out server details
+app.disable('x-powered-by');
+
+// Set render engines
+// app.set('view engine', 'ejs');
 app.set('view engine', 'pug');
-app.set('views', 'views');
 
-app.use(bodyParser.urlencoded({ extended: false }));
+// Set location of public views and static files
+app.set('views', path.join(__dirname, '/views'));
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Start a session for the user
 app.use(
 	session({
 		secret: 'Jessie and Mugi',
@@ -29,37 +115,57 @@ app.use(
 	})
 );
 
-// Routes
-const loginRoutes = require('./routes/loginRoutes');
-const logoutRoutes = require('./routes/logoutRoutes');
-const registerRoutes = require('./routes/registerRoutes');
-const postRoutes = require('./routes/postRoutes');
-const profileRoutes = require('./routes/profileRoutes');
-const uploadRoutes = require('./routes/uploadRoutes');
-const searchRoutes = require('./routes/searchRoutes');
-const messagesRoutes = require('./routes/messageRoutes');
-const notificationsRoutes = require('./routes/notificationsRoutes');
-const postsApiRoutes = require('./routes/api/postsApiRoutes');
-const usersApiRoutes = require('./routes/api/usersApiRoutes');
-const chatsApiRoutes = require('./routes/api/chatsApiRoutes');
-const messagesApiRoutes = require('./routes/api/messagesApiRoutes');
-const notificationsApiRoutes = require('./routes/api/notificationsApiRoutes');
+// Use morgan in development to show status codes in terminal
+if (process.env.NODE_ENV === 'test') {
+	app.use(morgan('dev'));
+}
 
-app.use('/login', loginRoutes);
-app.use('/logout', logoutRoutes);
-app.use('/register', registerRoutes);
-app.use('/post', middleware.requireLogin, postRoutes);
-app.use('/profile', middleware.requireLogin, profileRoutes);
-app.use('/uploads', uploadRoutes);
-app.use('/search', middleware.requireLogin, searchRoutes);
-app.use('/messages', middleware.requireLogin, messagesRoutes);
-app.use('/notifications', middleware.requireLogin, notificationsRoutes);
+// Rate limiter to prevent DNS and brute force attacks
+const limiter = rateLimit({
+	max: 200,
+	windowMs: 60 * 60 * 1000,
+	message: 'Too many requests from this IP. Please try again in an hour!',
+});
+app.use('/api', limiter);
 
-app.use('/api/posts', postsApiRoutes);
-app.use('/api/users', usersApiRoutes);
-app.use('/api/chats', chatsApiRoutes);
-app.use('/api/messages', messagesApiRoutes);
-app.use('/api/notifications', notificationsApiRoutes);
+// Body parser, reading data from body into req.body
+app.use(express.json({ limit: '10kb' }));
+app.use(express.urlencoded({ extended: true, limit: '10kb' }));
+
+// Cookie parser to read JWT in API
+// app.use(cookieParser());
+
+// DATA SANITISATION
+// Remove mongoDB type code to prevent NoSQL query injection
+app.use(mongoSanitize());
+// Remove HTML type code from inputs to prevent XSS cross-scripting attacks
+// app.use(xss());
+// Prevent parameter pollution
+app.use(hpp({ whiteList: [] }));
+
+// Compression for better live performance
+app.use(compression());
+
+// Declare routers in order to mount them and set routes
+app.use('/login', loginRouter);
+app.use('/logout', logoutRouter);
+app.use('/register', registerRouter);
+app.use('/post', middleware.requireLogin, postRouter);
+app.use('/profile', middleware.requireLogin, profileRouter);
+app.use('/uploads', uploadRouter);
+app.use('/search', middleware.requireLogin, searchRouter);
+app.use('/messages', middleware.requireLogin, messagesRouter);
+app.use('/notifications', middleware.requireLogin, notificationsRouter);
+
+app.use('/api/posts', postsApiRouter);
+app.use('/api/users', usersApiRouter);
+app.use('/api/chats', chatsApiRouter);
+app.use('/api/messages', messagesApiRouter);
+app.use('/api/notifications', notificationsApiRouter);
+// app.use('/', viewRouter);
+// app.use('/admin', adminRouter);
+// app.use('/user', userRouter);
+// app.use('/api/v2/utils', utilsRouter);
 
 app.get('/', middleware.requireLogin, (req, res, next) => {
 	const payload = {
@@ -70,33 +176,13 @@ app.get('/', middleware.requireLogin, (req, res, next) => {
 	res.status(200).render('home', payload);
 });
 
-io.on('connection', (socket) => {
-	socket.on('setup', (userData) => {
-		socket.join(userData._id);
-		socket.emit('connected');
-	});
-	socket.on('join room', (room) => {
-		socket.join(room);
-	});
-	socket.on('typing', (room) => {
-		socket.in(room).emit('typing');
-	});
-	socket.on('stop typing', (room) => {
-		socket.in(room).emit('stop typing');
-	});
-	socket.on('notification received', (room) => {
-		socket.in(room).emit('notification received');
-	});
-	socket.on('new message', (newMessage) => {
-		const { chat } = newMessage;
-		if (!chat.users) {
-			return console.log('Chat.users not defined');
-		}
-		chat.users.forEach((user) => {
-			if (user._id === newMessage.sender._id) {
-				return;
-			}
-			socket.in(user._id).emit('message received', newMessage);
-		});
-	});
+// Clean error reporting
+app.all('*', (req, res, next) => {
+	// const errorMessage = languageManager(req, res, '404');
+	const errorMessage = 'Something went wrong';
+	next(new AppError(errorMessage, 404));
 });
+
+app.use(errorController);
+
+module.exports = app;

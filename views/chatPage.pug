@@ -4,7 +4,7 @@ block content
   if errorMessage
     span.errorMessage #{errorMessage}
   else
-    script.
+    script(nonce=nonce).
       var chatId = '!{chat._id}';
     .chatPageContainer
       .chatTitleBarContainer

@@ -4,7 +4,7 @@ block content
   if !profileUser
     span.errorMessage User not found
   else
-    script.
+    script(nonce=nonce).
       var profileUserId = `!{profileUser._id}`
       var selectedTab = `!{selectedTab}`
   

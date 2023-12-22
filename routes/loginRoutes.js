@@ -27,7 +27,6 @@ router.post('/', async (req, res, next) => {
 			payload.errorMessage = 'Something went wrong';
 			res.status(200).render('login', payload);
 		});
-
 		if (user !== null) {
 			const result = await bcrypt.compare(req.body.logPassword, user.password);
 			if (result === true) {
