@@ -15,7 +15,7 @@ $('#searchBox').keyup((event) => {
 });
 
 function search(serachTerm, searchType) {
-	const url = searchType === 'users' ? '/api/users' : '/api/posts';
+	const url = searchType === 'users' ? '/api/v1/users' : '/api/v1/posts';
 
 	$.get(url, { search: serachTerm }, (results) => {
 		if (searchType === 'users') {

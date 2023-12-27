@@ -2,6 +2,7 @@
 let cropper;
 let timer;
 const selectedUsers = [];
+const postsApi = '/api/v1/posts';
 
 $(document).ready(() => {
 	refreshMessagesBadge();
@@ -35,7 +36,7 @@ $('#submitPostButton, #submitReplyButton').click((event) => {
 
 	const textbox = isModal ? $('#replyTextarea') : $('#postTextarea');
 
-	const url = '/api/posts';
+	const url = postsApi;
 
 	const data = {
 		content: textbox.val().trim(),
@@ -64,7 +65,7 @@ $('#submitPostButton, #submitReplyButton').click((event) => {
 
 $('#createChatButton').click(() => {
 	const data = JSON.stringify(selectedUsers);
-	const url = '/api/chats';
+	const url = '/api/v1/chats';
 	$.post(url, { users: data }, (chat) => {
 		if (!chat || !chat._id) {
 			return alert('Invalid server response');
@@ -122,9 +123,10 @@ $('#imageUploadButton').on('click', () => {
 	canvas.toBlob((blob) => {
 		const formData = new FormData();
 		formData.append('croppedImage', blob);
+		formData.append('imageType', 'profilePicture');
 
 		$.ajax({
-			url: '/api/users/profilePicture',
+			url: '/api/v1/users/profilePicture',
 			type: 'POST',
 			data: formData,
 			processData: false,
@@ -147,9 +149,10 @@ $('#coverPhotoUploadButton').on('click', () => {
 	canvas.toBlob((blob) => {
 		const formData = new FormData();
 		formData.append('croppedImage', blob);
+		formData.append('imageType', 'coverPhoto');
 
 		$.ajax({
-			url: '/api/users/coverPhoto',
+			url: '/api/v1/users/coverPhoto',
 			type: 'POST',
 			data: formData,
 			processData: false,
@@ -196,7 +199,7 @@ $(document).on('click', '.likeButton', (event) => {
 	}
 
 	$.ajax({
-		url: `/api/posts/${postId}/like`,
+		url: `${postsApi}/${postId}/like`,
 		type: 'PUT',
 		success: (postData) => {
 			button.find('span').text(postData.likes.length || '');
@@ -219,7 +222,7 @@ $(document).on('click', '.retweetButton', (event) => {
 	}
 
 	$.ajax({
-		url: `/api/posts/${postId}/retweet`,
+		url: `${postsApi}/${postId}/share`,
 		type: 'POST',
 		success: (postData) => {
 			button.find('span').text(postData.retweetUsers.length || '');
@@ -361,7 +364,7 @@ $('#replyModalCenter').on('show.bs.modal', (event) => {
 	const postId = getPostIdFromElement(button);
 	$('#submitReplyButton').data('id', postId);
 
-	const url = `/api/posts/${postId}`;
+	const url = `${postsApi}/${postId}`;
 
 	$.get(url, (results) => {
 		outputPosts(results.postData, $('#originalPostContainer'));
@@ -394,7 +397,7 @@ $('#deletePostButton').click((event) => {
 	const postId = $(event.target).data('id');
 
 	$.ajax({
-		url: `/api/posts/${postId}`,
+		url: `${postsApi}/${postId}`,
 		type: 'DELETE',
 		success: (data, status, xhr) => {
 			if (xhr.status !== 202) {
@@ -410,7 +413,7 @@ $('#pinPostButton').click((event) => {
 	const postId = $(event.target).data('id');
 
 	$.ajax({
-		url: `/api/posts/${postId}`,
+		url: `${postsApi}/${postId}`,
 		type: 'PUT',
 		data: { pinned: true },
 		success: (data, status, xhr) => {
@@ -427,7 +430,7 @@ $('#unpinPostButton').click((event) => {
 	const postId = $(event.target).data('id');
 
 	$.ajax({
-		url: `/api/posts/${postId}`,
+		url: `${postsApi}/${postId}`,
 		type: 'PUT',
 		data: { pinned: false },
 		success: (data, status, xhr) => {
@@ -445,7 +448,7 @@ $(document).on('click', '.followButton', (event) => {
 	const userId = button.data().user;
 
 	$.ajax({
-		url: `/api/users/${userId}/follow`,
+		url: `/api/v1/users/${userId}/follow`,
 		type: 'PUT',
 		success: (data, status, xhr) => {
 			if (xhr.status === 404) {
@@ -564,7 +567,7 @@ function createUserHtml(userData, showFollowButton) {
 }
 
 function searchUsers(searchTerm) {
-	$.get('/api/users', { search: searchTerm }, (results) => {
+	$.get('/api/v1/users', { search: searchTerm }, (results) => {
 		outputSelectableUsers(results, $('.resultsContainer'));
 	});
 }
@@ -630,12 +633,13 @@ function getOtherChatUsers(users) {
 }
 
 function messageReceived(newMessage) {
-	if ($(`[data-room='${newMessage.chat._id}]`).length === 0) {
+	if ($(`[data-room='${newMessage.chat._id}']`).length === 0) {
 		showMessagePopup(newMessage);
+		refreshMessagesBadge();
 	} else {
 		addChatMessageHtml(newMessage);
+		markAllMessagesAsRead();
 	}
-	refreshMessagesBadge();
 }
 
 function timeDifference(current, previous) {
@@ -672,13 +676,14 @@ function markNotificationAsOpened(notificationId = null, callback = null) {
 		};
 	}
 
-	const url = notificationId != null ? `/api/notifications/${notificationId}/opened` : `/api/notifications/opened`;
+	const url =
+		notificationId != null ? `/api/v1/notifications/${notificationId}/opened` : `/api/v1/notifications/opened`;
 
 	$.ajax({ url: url, type: 'PUT', success: () => callback() });
 }
 
 function refreshMessagesBadge() {
-	$.get(`/api/chats`, { unreadOnly: true }, (data) => {
+	$.get(`/api/v1/chats`, { unreadOnly: true }, (data) => {
 		const numberOfResults = data.length;
 		if (numberOfResults > 0) {
 			$('#messagesBadge').text(numberOfResults).addClass('active');
@@ -689,7 +694,7 @@ function refreshMessagesBadge() {
 }
 
 function refreshNotificationsBadge() {
-	$.get(`/api/notifications`, { unreadOnly: true }, (data) => {
+	$.get(`/api/v1/notifications`, { unreadOnly: true }, (data) => {
 		const numberOfResults = data.length;
 		if (numberOfResults > 0) {
 			$('#notificationsBadge').text(numberOfResults).addClass('active');

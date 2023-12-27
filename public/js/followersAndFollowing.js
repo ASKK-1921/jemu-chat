@@ -1,7 +1,7 @@
 $(document).ready(() => {
 	// const dataType = selectedTab === 'followers';
 	// loadData(dataType);
-	const url = `/api/users/${profileUserId}/${selectedTab}`;
+	const url = `/api/v1/users/${profileUserId}/${selectedTab}`;
 
 	$.get(url, (results) => {
 		outputUsers(results, $('.resultsContainer'));

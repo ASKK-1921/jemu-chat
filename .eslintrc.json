@@ -15,7 +15,11 @@
 		"class-methods-use-this": "off",
 		"prefer-destructuring": ["error", { "object": true, "array": false }],
 		"no-unused-vars": ["error", { "argsIgnorePattern": "req|res|next|val" }],
-		"no-plusplus": [2, { "allowForLoopAfterthoughts": true }]
+		"no-plusplus": [2, { "allowForLoopAfterthoughts": true }],
+		"import/no-extraneous-dependencies": [
+      "error",
+      {"devDependencies": true}
+    ]
 	},
 	"env": {
 		"browser": true,

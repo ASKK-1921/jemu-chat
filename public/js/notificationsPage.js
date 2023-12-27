@@ -1,5 +1,5 @@
 $(document).ready(() => {
-	$.get('/api/notifications', (data) => {
+	$.get('/api/v1/notifications', (data) => {
 		outputNotificationList(data, $('.resultsContainer'));
 	});
 });

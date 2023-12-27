@@ -4,7 +4,7 @@ $(document).ready(() => {
 });
 
 function loadContent(isReply) {
-	const url = '/api/posts';
+	const url = '/api/v1/posts';
 
 	if (isReply === false) {
 		$.get(url, { postedBy: profileUserId, pinned: true }, (results) => {

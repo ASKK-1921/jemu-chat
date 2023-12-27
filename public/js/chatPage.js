@@ -9,11 +9,10 @@ $(document).ready(() => {
 	socket.on('stop typing', () => {
 		$('.typingDots').hide();
 	});
-
-	$.get(`/api/chats/${chatId}`, (data) => {
+	$.get(`/api/v1/chats/${chatId}`, (data) => {
 		$('#chatName').text(getChatName(data));
 	});
-	$.get(`/api/chats/${chatId}/messages`, (data) => {
+	$.get(`/api/v1/chats/${chatId}/messages`, (data) => {
 		const messages = [];
 		let lastSenderId = '';
 		data.forEach((message, index) => {
@@ -34,7 +33,7 @@ $('#chatNameButton').click(() => {
 	const name = $('#chatNameTextbox').val().trim();
 
 	$.ajax({
-		url: `/api/chats/${chatId}`,
+		url: `/api/v1/chats/${chatId}`,
 		type: 'PUT',
 		data: { chatName: name },
 		success: (data, status, xhr) => {
@@ -95,7 +94,7 @@ function messageSubmitted() {
 }
 
 function sendMessage(content) {
-	$.post(`/api/messages`, { content: content, chatId: chatId }, (data, status, xhr) => {
+	$.post(`/api/v1/messages`, { content: content, chatId: chatId }, (data, status, xhr) => {
 		if (xhr.status !== 201) {
 			alert('Could not send message');
 			$('.inputTextbox').val(content);
@@ -181,7 +180,7 @@ function scrollToBottom(animated) {
 
 function markAllMessagesAsRead() {
 	$.ajax({
-		url: `/api/chats/${chatId}/messages/markasread`,
+		url: `/api/v1/chats/${chatId}/messages/markasread`,
 		type: 'PUT',
 		success: () => {
 			refreshMessagesBadge();

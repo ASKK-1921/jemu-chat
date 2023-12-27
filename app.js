@@ -11,31 +11,19 @@ const compression = require('compression');
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
 const hpp = require('hpp');
-const middleware = require('./middleware');
+// const middleware = require('./middleware');
 
 // Utilities
 const AppError = require('./system/utils/appError');
 // const languageManager = require('./system/utils/languageManager');
 
 // Routers
-const loginRouter = require('./routes/loginRoutes');
-const logoutRouter = require('./routes/logoutRoutes');
-const registerRouter = require('./routes/registerRoutes');
-const postRouter = require('./routes/postRoutes');
-const profileRouter = require('./routes/profileRoutes');
-const uploadRouter = require('./routes/uploadRoutes');
-const searchRouter = require('./routes/searchRoutes');
-const messagesRouter = require('./routes/messageRoutes');
-const notificationsRouter = require('./routes/notificationsRoutes');
-const postsApiRouter = require('./routes/api/postsApiRoutes');
-const usersApiRouter = require('./routes/api/usersApiRoutes');
-const chatsApiRouter = require('./routes/api/chatsApiRoutes');
-const messagesApiRouter = require('./routes/api/messagesApiRoutes');
-const notificationsApiRouter = require('./routes/api/notificationsApiRoutes');
-// const viewRouter = require('./system/routes/viewRoutes');
-// const adminRouter = require('./system/routes/adminRoutes');
-// const userRouter = require('./system/routes/userRoutes');
-// const utilsRouter = require('./system/routes/utilsRoutes');
+const viewRoutes = require('./system/routes/viewRoutes');
+const postRoutes = require('./system/routes/postRoutes');
+const userRoutes = require('./system/routes/userRoutes');
+const notificationRoutes = require('./system/routes/notificationRoutes');
+const chatRoutes = require('./system/routes/chatRoutes');
+const messageRoutes = require('./system/routes/messageRoutes');
 
 // Controllers
 const errorController = require('./system/controllers/errorController');
@@ -121,12 +109,13 @@ if (process.env.NODE_ENV === 'test') {
 }
 
 // Rate limiter to prevent DNS and brute force attacks
-const limiter = rateLimit({
-	max: 200,
-	windowMs: 60 * 60 * 1000,
-	message: 'Too many requests from this IP. Please try again in an hour!',
-});
-app.use('/api', limiter);
+// TODO: Need to rethink this because there are a lot of calls
+// const limiter = rateLimit({
+// 	max: 200,
+// 	windowMs: 60 * 60 * 1000,
+// 	message: 'Too many requests from this IP. Please try again in an hour!',
+// });
+// app.use('/api', limiter);
 
 // Body parser, reading data from body into req.body
 app.use(express.json({ limit: '10kb' }));
@@ -147,34 +136,12 @@ app.use(hpp({ whiteList: [] }));
 app.use(compression());
 
 // Declare routers in order to mount them and set routes
-app.use('/login', loginRouter);
-app.use('/logout', logoutRouter);
-app.use('/register', registerRouter);
-app.use('/post', middleware.requireLogin, postRouter);
-app.use('/profile', middleware.requireLogin, profileRouter);
-app.use('/uploads', uploadRouter);
-app.use('/search', middleware.requireLogin, searchRouter);
-app.use('/messages', middleware.requireLogin, messagesRouter);
-app.use('/notifications', middleware.requireLogin, notificationsRouter);
-
-app.use('/api/posts', postsApiRouter);
-app.use('/api/users', usersApiRouter);
-app.use('/api/chats', chatsApiRouter);
-app.use('/api/messages', messagesApiRouter);
-app.use('/api/notifications', notificationsApiRouter);
-// app.use('/', viewRouter);
-// app.use('/admin', adminRouter);
-// app.use('/user', userRouter);
-// app.use('/api/v2/utils', utilsRouter);
-
-app.get('/', middleware.requireLogin, (req, res, next) => {
-	const payload = {
-		pageTitle: 'Home',
-		userLoggedIn: req.session.user,
-		userLoggedInJs: JSON.stringify(req.session.user),
-	};
-	res.status(200).render('home', payload);
-});
+app.use('/api/v1/posts', postRoutes);
+app.use('/api/v1/users', userRoutes);
+app.use('/api/v1/notifications', notificationRoutes);
+app.use('/api/v1/chats', chatRoutes);
+app.use('/api/v1/messages', messageRoutes);
+app.use('/', viewRoutes);
 
 // Clean error reporting
 app.all('*', (req, res, next) => {

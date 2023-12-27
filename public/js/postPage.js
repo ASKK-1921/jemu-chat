@@ -1,5 +1,5 @@
 $('document').ready(() => {
-	const url = `/api/posts/${postId}`;
+	const url = `/api/v1/posts/${postId}`;
 
 	$.ajax({
 		url: url,

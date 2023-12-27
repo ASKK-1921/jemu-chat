@@ -13,7 +13,7 @@ socket.on('message received', (newMessage) => {
 });
 
 socket.on('notification received', () => {
-	$.get('/api/notifications/latest', (notificationData) => {
+	$.get('/api/v1/notifications/latest', (notificationData) => {
 		showNotificationPopup(notificationData);
 		refreshNotificationsBadge();
 	});

@@ -1,5 +1,5 @@
 $('document').ready(() => {
-	url = '/api/chats';
+	const url = '/api/v1/chats';
 	$.get(url, (data, status, xhr) => {
 		if (xhr.status === 400) {
 			alert('Could not get the chat list.');

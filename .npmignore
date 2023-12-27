@@ -1,0 +1,4 @@
+# Tell the system to ignore test files when
+# checking for files that use 
+
+system/tests
