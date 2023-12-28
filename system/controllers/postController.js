@@ -149,7 +149,7 @@ exports.updatePinnedPost = catchAsync(async (req, res, next) => {
 	}
 
 	// Update the pinned value on the target post
-	const updatedPost = Post.findByIdAndUpdate(id, req.body);
+	const updatedPost = await Post.findByIdAndUpdate(id, req.body);
 
 	if (!updatedPost) {
 		console.log('Could not update post');
