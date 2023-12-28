@@ -63,9 +63,18 @@ exports.followUser = catchAsync(async (req, res, next) => {
 	);
 
 	// Update the target user
-	User.findByIdAndUpdate(userId, {
-		[option]: { followers: req.session.user._id },
-	});
+	const targetUser = await User.findByIdAndUpdate(
+		userId,
+		{
+			[option]: { followers: req.session.user._id },
+		},
+		{ new: true }
+	);
+
+	if (!targetUser) {
+		console.log('An error occured while toggling the follow on the target user');
+		res.sendStatus(400);
+	}
 
 	// Send a notification to the target user if they are now being followed
 	if (!isFollowing) {
