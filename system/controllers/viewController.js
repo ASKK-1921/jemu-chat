@@ -4,6 +4,7 @@ const catchAsync = require('../utils/catchAsync');
 const renderPage = require('../utils/renderPage');
 const User = require('../models/userModel');
 const Chat = require('../models/chatModel');
+const Post = require('../models/postModel');
 
 // CONTROLLER FUNCTIONS
 // Allow for loading profiles with either username or ID
@@ -57,6 +58,17 @@ const getChatByUserId = (userLoggedInId, otherUserId) => {
 	).populate('users');
 };
 
+const getPosts = async (filter) => {
+	let results = await Post.find(filter)
+		.populate('postedBy')
+		.populate('shareData')
+		.populate('replyTo')
+		.sort({ createdAt: -1 });
+
+	results = await User.populate(results, { path: 'replyTo.postedBy' });
+	return await User.populate(results, { path: 'shareData.postedBy' });
+};
+
 // EXPORTS
 // Login
 exports.getLoginPage = (req, res, next) => {
@@ -83,6 +95,7 @@ exports.getProfilePage = (req, res, next) => {
 	const payload = {
 		pageTitle: username,
 		profileUser: user,
+		activeUser: req.session.user,
 	};
 
 	// Render the page
@@ -96,6 +109,7 @@ exports.getUserProfilePage = catchAsync(async (req, res, next) => {
 
 	// Get the payload dynamically
 	const payload = await getPayload(username);
+	payload.activeUser = req.session.user;
 
 	// Render the page
 	renderPage(req, res, 200, 'profile', payload);
@@ -110,6 +124,8 @@ exports.getProfileDetailsPage = catchAsync(async (req, res, next) => {
 
 	// Get the payload dynamically
 	const payload = await getPayload(username);
+	payload.activeUser = req.session.user;
+
 	if (dataType === 'replies' || dataType === 'following' || dataType === 'followers') {
 		payload.selectedTab = dataType;
 	} else {
@@ -130,7 +146,7 @@ exports.getSinglePostPage = (req, res, next) => {
 		pageTitle: 'View Post',
 		postId: req.params.id,
 	};
-	renderPage(req, res, 200, 'postPage', payload);
+	renderPage(req, res, 200, 'post', payload);
 };
 
 // Notifications
@@ -222,3 +238,25 @@ exports.getSearchTabPage = (req, res, next) => {
 	const payload = { selectedTab: req.params.selectedTab };
 	renderPage(req, res, 200, 'search', payload);
 };
+
+exports.getSinglePost = catchAsync(async (req, res, next) => {
+	const postId = req.params.id;
+	let postData = await getPosts({ _id: postId });
+	postData = postData[0];
+
+	const results = {
+		postData: postData,
+	};
+
+	if (!postData) {
+		return res.sendStatus(204);
+	}
+
+	if (postData.replyTo != null) {
+		results.replyTo = postData.replyTo;
+	}
+
+	results.replies = await getPosts({ replyTo: postId });
+
+	res.status(200).send(results);
+});

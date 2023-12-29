@@ -9,12 +9,12 @@ const Notification = require('../models/notificationModel');
 const getPosts = async (filter) => {
 	let results = await Post.find(filter)
 		.populate('postedBy')
-		.populate('retweetData')
+		.populate('shareData')
 		.populate('replyTo')
 		.sort({ createdAt: -1 });
 
 	results = await User.populate(results, { path: 'replyTo.postedBy' });
-	return await User.populate(results, { path: 'retweetData.postedBy' });
+	return await User.populate(results, { path: 'shareData.postedBy' });
 };
 
 // EXPORTS
@@ -22,24 +22,20 @@ const getPosts = async (filter) => {
 exports.getFilteredPosts = catchAsync(async (req, res, next) => {
 	// Assign values to clear variables
 	const { query } = req;
-
 	// Check if we should filter by type "Reply"
 	if (query.isReply !== undefined) {
 		const isReply = query.isReply === 'true';
 		query.replyTo = { $exists: isReply };
 		delete query.isReply;
 	}
-
 	// Check if we are using the general search option
 	if (query.search !== undefined) {
 		query.content = { $regex: query.search, $options: 'i' };
 		delete query.search;
 	}
-
 	// Check if we should filter to only posts for users we are following
 	if (query.followingOnly !== undefined) {
 		const followingOnly = query.followingOnly === 'true';
-
 		if (followingOnly) {
 			const objectIdArray = [];
 			if (!req.session.user.following) {
@@ -165,7 +161,7 @@ exports.deletePost = catchAsync(async (req, res, next) => {
 
 	// Delete posts that have replied to or shared the original post
 	const deleteReplies = await Post.deleteMany({ replyTo: id });
-	const deleteShares = await Post.deleteMany({ retweetData: id });
+	const deleteShares = await Post.deleteMany({ shareData: id });
 
 	// If all connected posts were deleted successfully, delete the original post
 	if (deleteReplies.acknowledged && deleteShares.acknowledged) {
@@ -220,7 +216,7 @@ exports.toggleShareForPost = catchAsync(async (req, res, next) => {
 	// Delete the share if it's already been shared
 	const deletedPost = await Post.findOneAndDelete({
 		postedBy: userId,
-		retweetData: postId,
+		shareData: postId,
 	}).catch((error) => {
 		console.log(error);
 		res.sendStatus(400);
@@ -232,14 +228,14 @@ exports.toggleShareForPost = catchAsync(async (req, res, next) => {
 	let repost = deletedPost;
 
 	if (repost == null) {
-		repost = await Post.create({ postedBy: userId, retweetData: postId }).catch((error) => {
+		repost = await Post.create({ postedBy: userId, shareData: postId }).catch((error) => {
 			console.log(error);
 			res.sendStatus(400);
 		});
 	}
 
 	// Insert/remove the share on the user's records
-	req.session.user = await User.findByIdAndUpdate(userId, { [option]: { retweets: repost._id } }, { new: true }).catch(
+	req.session.user = await User.findByIdAndUpdate(userId, { [option]: { shares: repost._id } }, { new: true }).catch(
 		(error) => {
 			console.log(error);
 			res.sendStatus(400);
@@ -247,7 +243,7 @@ exports.toggleShareForPost = catchAsync(async (req, res, next) => {
 	);
 
 	// Insert/remove the share on the post's records
-	const post = await Post.findByIdAndUpdate(postId, { [option]: { retweetUsers: userId } }, { new: true }).catch(
+	const post = await Post.findByIdAndUpdate(postId, { [option]: { shareUsers: userId } }, { new: true }).catch(
 		(error) => {
 			console.log(error);
 			res.sendStatus(400);
@@ -256,7 +252,7 @@ exports.toggleShareForPost = catchAsync(async (req, res, next) => {
 
 	// If the action is to share the post, send a notification to the original poster
 	if (!deletedPost) {
-		await Notification.insertNotification(post.postedBy, userId, 'retweet', post._id);
+		await Notification.insertNotification(post.postedBy, userId, 'share', post._id);
 	}
 
 	res.status(200).send(post);

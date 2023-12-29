@@ -51,6 +51,7 @@ const server = app.listen(port, () => {
 
 // Attach a socket.io server to the running server
 const io = new Server(server, { pingTimeout: 60000 });
+// const io = require('socket.io')(server, { pingTimeout: 60000 });
 
 // Safety net to catch unhandled rejections and log details
 process.on('unhandledRejection', (err) => {
@@ -67,7 +68,7 @@ process.on('unhandledRejection', (err) => {
 // Handle all socket.io events
 io.on('connection', (socket) => {
 	socket.on('setup', (userData) => {
-		socket.join(userData._id);
+		socket.join(userData);
 		socket.emit('connected');
 	});
 	socket.on('join room', (room) => {

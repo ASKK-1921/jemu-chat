@@ -4,13 +4,8 @@ block content
   if !profileUser
     span.errorMessage User not found
   else
-    script(nonce=nonce).
-      var profileUserId = `!{profileUser._id}`
-      var selectedTab = `!{selectedTab}`
   
-    .tabsContainer
+    .tabsContainer(data-tab=selectedTab data-pid=profileUser._id)
       +createTab("Following", `/profile/${profileUser.username}/following`, selectedTab != 'followers')
       +createTab("Followers", `/profile/${profileUser.username}/followers`, selectedTab == 'followers')
-    .resultsContainer
-block scripts
-  script(src="/js/followersAndFollowing.js") 
+    .resultsContainer#followersAndFollowingContainer

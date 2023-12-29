@@ -8,7 +8,7 @@ const mongoSanitize = require('express-mongo-sanitize');
 const session = require('express-session');
 const morgan = require('morgan');
 const compression = require('compression');
-const rateLimit = require('express-rate-limit');
+// const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
 const hpp = require('hpp');
 // const middleware = require('./middleware');
@@ -120,9 +120,6 @@ if (process.env.NODE_ENV === 'test') {
 // Body parser, reading data from body into req.body
 app.use(express.json({ limit: '10kb' }));
 app.use(express.urlencoded({ extended: true, limit: '10kb' }));
-
-// Cookie parser to read JWT in API
-// app.use(cookieParser());
 
 // DATA SANITISATION
 // Remove mongoDB type code to prevent NoSQL query injection

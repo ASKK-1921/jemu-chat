@@ -28,14 +28,10 @@ exports.createMessage = catchAsync(async (req, res, next) => {
 
 	Message.create(newMessage)
 		.then(async (message) => {
-			const chat = await Chat.findByIdAndUpdate(req.body.chatId, { latestMessage: message }, { new: true });
 			message = await message.populate(['sender']);
 			message = await message.populate(['chat']);
 			message = await User.populate(message, { path: 'chat.users' });
-
-			// Patch for bug in brand new chats
-			console.log(chat);
-			console.log(message);
+			const chat = await Chat.findByIdAndUpdate(req.body.chatId, { latestMessage: message }, { new: true });
 
 			insertNotification(chat, message);
 

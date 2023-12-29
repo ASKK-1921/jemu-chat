@@ -58,7 +58,7 @@ const userSchema = new mongoose.Schema(
 				ref: 'Post',
 			},
 		],
-		retweets: [
+		shares: [
 			{
 				type: mongoose.Schema.ObjectId,
 				ref: 'Post',

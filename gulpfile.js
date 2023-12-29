@@ -11,12 +11,13 @@ const rename = require('gulp-rename');
 const env = 'development';
 
 function onError(err) {
-	const splitFilename = err.file.split('/');
-	const fileName = splitFilename[splitFilename.length - 1];
-	/* eslint-disable no-console */
-	console.log('\u001b[1;31m *** Error ***');
-	console.log(`\u001b[1;32m・・・Error in file '${fileName}' on line ${err.line}・・・`);
-	/* eslint-enable no-console */
+	console.log(err);
+	// const splitFilename = err.file.split('/');
+	// const fileName = splitFilename[splitFilename.length - 1];
+	// /* eslint-disable no-console */
+	// console.log('\u001b[1;31m *** Error ***');
+	// console.log(`\u001b[1;32m・・・Error in file '${fileName}' on line ${err.line}・・・`);
+	// /* eslint-enable no-console */
 	this.emit('end');
 }
 
@@ -36,7 +37,8 @@ function scripts() {
 		.pipe(babel())
 		.pipe(uglify())
 		.pipe(rename('bundle.min.js'))
-		.pipe(gulp.dest(paths.scripts.dest));
+		.pipe(gulp.dest(paths.scripts.dest))
+		.on('error', onError);
 }
 
 function watch() {

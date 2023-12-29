@@ -19,13 +19,13 @@ const PostSchema = new mongoose.Schema(
 				ref: 'User',
 			},
 		],
-		retweetUsers: [
+		shareUsers: [
 			{
 				type: mongoose.Schema.ObjectId,
 				ref: 'User',
 			},
 		],
-		retweetData: {
+		shareData: {
 			type: mongoose.Schema.ObjectId,
 			ref: 'Post',
 		},

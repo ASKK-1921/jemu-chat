@@ -28,6 +28,7 @@
 		"nodemon": "^3.0.1",
 		"pug": "^3.0.2",
 		"socket.io": "^4.7.2",
+		"socket.io-client": "^4.7.2",
 		"ua-parser-js": "^1.0.37",
 		"validator": "^13.11.0"
 	},
@@ -41,8 +42,17 @@
 		"eslint-plugin-prettier": "^5.1.1",
 		"eslint-plugin-react": "^7.33.2",
 		"eslint-plugin-react-hooks": "^4.6.0",
+		"gulp": "^4.0.2",
+		"gulp-babel": "^8.0.0",
+		"gulp-plumber": "^1.2.1",
+		"gulp-rename": "^2.0.0",
+		"gulp-uglify": "^3.0.2",
 		"mocha": "^10.2.0",
 		"prettier": "^3.1.1",
-		"supertest": "^6.3.3"
+		"supertest": "^6.3.3",
+		"webpack-stream": "^7.0.0"
+	},
+	"overrides": {
+		"glob-parent": "6.0.2"
 	}
 }

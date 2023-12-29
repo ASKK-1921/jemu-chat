@@ -128,7 +128,7 @@ mixin createChatImage(chatData, userLoggedIn)
       .userCount
         span +#{remainingUsers}
     each user in chatData.users
-      if chatData.users.length != 1 && user._id == userLoggedIn._id
+      if chatData.users.length != 1 && user._id == userLoggedIn
         - continue
       else if i >= maximumImagesToShow
         - break

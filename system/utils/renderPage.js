@@ -28,7 +28,8 @@ module.exports = (req, res, statusCode, page, payload = {}) => {
 
 	if (req.session.user) {
 		payload.userLoggedIn = req.session.user;
-		payload.userLoggedInJs = JSON.stringify(req.session.user);
+		payload.userLoggedInJs = JSON.stringify(req.session.user._id);
+		payload.pageFileForJs = page;
 	}
 
 	// return res.status(200).render(`${device}/${page}.ejs`, { title, lang });

@@ -1,6 +1,7 @@
 // This is a file used only for testing in development
 // As such, remove undefined errors from eslint
 /* eslint-disable no-undef */
+/* eslint-disable node/no-unpublished-require */
 
 // Dependencies
 const supertest = require('supertest');
