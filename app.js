@@ -97,7 +97,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Start a session for the user
 app.use(
 	session({
-		secret: 'Jessie and Mugi',
+		secret: process.env.SESSION_SECRET,
 		resave: true,
 		saveUninitialized: false,
 	})
