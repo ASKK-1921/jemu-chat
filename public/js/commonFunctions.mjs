@@ -1,4 +1,5 @@
-import { chatRoutesUrl, notificationRoutesUrl, userRoutesUrl } from './apiRoutes.mjs';
+import { chatRoutesUrl, notificationRoutesUrl } from './apiRoutes.mjs';
+// eslint-disable-next-line import/no-cycle
 import { addMessagesHtmlToPage, createMessageHtml, scrollToBottom } from './chatHandler.mjs';
 
 const userLoggedIn = $('body').data('uid');
@@ -441,8 +442,7 @@ const messageReceived = (newMessage) => {
 		showMessagePopup(newMessage);
 		refreshMessagesBadge();
 	} else {
-		// TODO: IMPORT THESE
-		markAllMessagesAsRead();
+		markAllMessagesAsRead(newMessage.chat._id);
 		addChatMessageHtml(newMessage);
 	}
 };
