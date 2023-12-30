@@ -3,6 +3,7 @@ const Message = require('../models/messageModel');
 const User = require('../models/userModel');
 const Chat = require('../models/chatModel');
 const Notification = require('../models/notificationModel');
+const messageEncryption = require('../utils/messageEncryption');
 
 const insertNotification = (chat, message) => {
 	chat.users.forEach((userId) => {
@@ -19,26 +20,34 @@ exports.createMessage = catchAsync(async (req, res, next) => {
 		return res.sendStatus(400);
 	}
 
+	const encryptedMessageData = await messageEncryption.encrypt(req.body.content);
+
 	const newMessage = {
 		sender: req.session.user._id,
-		content: req.body.content,
+		vector: encryptedMessageData.vector,
+		content: encryptedMessageData.message,
 		chat: req.body.chatId,
 		readBy: [req.session.user._id],
 	};
 
-	Message.create(newMessage)
-		.then(async (message) => {
-			message = await message.populate(['sender']);
-			message = await message.populate(['chat']);
-			message = await User.populate(message, { path: 'chat.users' });
-			const chat = await Chat.findByIdAndUpdate(req.body.chatId, { latestMessage: message }, { new: true });
+	const createdMessage = await Message.create(newMessage).then(async (message) => {
+		message = await message.populate(['sender']);
+		message = await message.populate(['chat']);
+		message = await User.populate(message, { path: 'chat.users' });
+		return message;
+	});
 
-			insertNotification(chat, message);
+	if (!createdMessage) {
+		console.log('Could not create message');
+		res.sendStatus(400);
+	}
 
-			res.status(201).send(message);
-		})
-		.catch((error) => {
-			console.log(error);
-			res.sendStatus(400);
-		});
+	const chat = await Chat.findByIdAndUpdate(req.body.chatId, { latestMessage: createdMessage }, { new: true });
+	insertNotification(chat, createdMessage);
+
+	const decryptedMessageData = await messageEncryption.decrypt(createdMessage.content, createdMessage.vector);
+
+	createdMessage.content = decryptedMessageData;
+
+	res.status(201).send(createdMessage);
 });

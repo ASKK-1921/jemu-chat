@@ -6,6 +6,9 @@ const MessageSchema = new mongoose.Schema(
 			type: mongoose.Schema.ObjectId,
 			ref: 'User',
 		},
+		vector: {
+			type: String,
+		},
 		content: {
 			type: String,
 			trim: true,

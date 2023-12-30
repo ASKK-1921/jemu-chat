@@ -2,6 +2,7 @@ const catchAsync = require('../utils/catchAsync');
 const Chat = require('../models/chatModel');
 const Message = require('../models/messageModel');
 const User = require('../models/userModel');
+const messageEncryption = require('../utils/messageEncryption');
 
 exports.getAllChats = catchAsync(async (req, res, next) => {
 	let chats = await Chat.find({ users: { $elemMatch: { $eq: req.session.user._id } } })
@@ -17,6 +18,15 @@ exports.getAllChats = catchAsync(async (req, res, next) => {
 	if (req.query.unreadOnly !== undefined && req.query.unreadOnly === 'true') {
 		chats = chats.filter((r) => r.latestMessage && !r.latestMessage.readBy.includes(req.session.user._id));
 	}
+
+	await chats.forEach(async (chat) => {
+		if (chat.latestMessage.vector) {
+			chat.latestMessage.content = await messageEncryption.decrypt(
+				chat.latestMessage.content,
+				chat.latestMessage.vector
+			);
+		}
+	});
 
 	chats = await User.populate(chats, { path: 'latestMessage.sender' });
 
@@ -93,6 +103,12 @@ exports.getMessages = catchAsync(async (req, res, next) => {
 		console.log('Could not find messages');
 		res.sendStatus(404);
 	}
+
+	await messages.forEach(async (message) => {
+		if (message.vector) {
+			message.content = await messageEncryption.decrypt(message.content, message.vector);
+		}
+	});
 
 	res.status(200).send(messages);
 });
