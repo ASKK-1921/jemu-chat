@@ -5,3 +5,4 @@ node_modules/
 uploads/
 config.env
 /_archive
+public/js/bundle.min.js
