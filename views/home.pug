@@ -1,6 +1,14 @@
 extends layouts/main-layout.pug 
 
 block content
-  +createPostForm(userLoggedIn)
+  .stickyTop
+    +createPostForm(userLoggedIn)
+    .tabsContainer#homePostsFilterTabs
+      a#allPostsTab(href='/', class='tab active')
+        span All Posts
+      a#filteredPostsTab(href='/', class='tab')
+        span Following Only
+  .loadingSpinnerContainer
+    img(src="/images/rabbit_loader.gif", alt="Loading Spiner")
   .postsContainer#homePagePostsContainer
   +postModals(userLoggedIn)

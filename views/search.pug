@@ -1,13 +1,14 @@
 extends layouts/main-layout.pug 
 
 block content
-  .searchBarContainer
-    i.fa-solid.fa-search
-    input#searchBox(type="text", name="searchBox", data-search=selectedTab, placeholder='Search for users or posts')
+  .stickyTop
+    .searchBarContainer
+      i.fa-solid.fa-search
+      input#searchBox(type="text", name="searchBox", data-search=selectedTab, placeholder='Search for users or posts')
 
-  .tabsContainer
-    +createTab("Posts", `/search/posts`, selectedTab != 'users')
-    +createTab("Users", `/search/users`, selectedTab == 'users')
+    .tabsContainer
+      +createTab("Posts", `/search/posts`, selectedTab != 'users')
+      +createTab("Users", `/search/users`, selectedTab == 'users')
 
   .resultsContainer
 

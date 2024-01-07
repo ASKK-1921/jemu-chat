@@ -1,7 +1,7 @@
 mixin createPostForm(userLoggedIn)
   .postFormContainer
-    .userImageContainer
-      img(src=userLoggedIn.profilePicture, alt="User's profile picture")
+    //- .userImageContainer
+    //-   img(src=userLoggedIn.profilePicture, alt="User's profile picture")
     .textareaContainer
       textarea#postTextarea(placeholder="What's up?")
       .buttonsContainer
@@ -51,7 +51,7 @@ mixin createFollowButton(user, isFollowing)
   - buttonClass = isFollowing ? "followButton following" : "followButton"
   button(class=buttonClass, data-user=user._id) #{text}
 
-mixin createTab(name, href, isSelected)
+mixin createTab(name, href, isSelected=false)
   - className = isSelected ? "tab active" : "tab"
   a(href=href, class=className)
     span #{name}
@@ -148,3 +148,16 @@ mixin chatNameModal(chat)
         .modal-footer
           button.btn.btn-secondary(type='button', data-bs-dismiss='modal') Cancel
           button#chatNameButton.btn.btn-primary(type='button') Save
+
+mixin icon(name)
+  span.material-symbols-outlined #{name}
+
+mixin myDetailsArea()
+  #myDetailsArea
+    .userImageContainer
+      img(src=userLoggedIn.profilePicture alt='profile picture')
+    .userDetailsContainer
+      .header
+        span.myName #{userLoggedIn.firstName}
+        //- a(href=`/profile/${userLoggedIn.username}`) #{userLoggedIn.firstName} #{userLoggedIn.lastName}
+        span.username @#{userLoggedIn.username}

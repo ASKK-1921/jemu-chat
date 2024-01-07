@@ -356,6 +356,23 @@ if (page === 'home') {
 	$(document).ready(() => {
 		homeHandler.getFilteredPosts();
 	});
+
+	// TODO: make the active class change on the tabs
+	const updateTabs = () => {
+		$('#filteredPostsTab').toggleClass('active');
+		$('#allPostsTab').toggleClass('active');
+	};
+
+	$('#filteredPostsTab').click((e) => {
+		e.preventDefault();
+		updateTabs();
+		homeHandler.getFilteredPosts(true);
+	});
+	$('#allPostsTab').click((e) => {
+		e.preventDefault();
+		updateTabs();
+		homeHandler.getFilteredPosts(false);
+	});
 }
 
 // CHAT PAGE
@@ -404,6 +421,7 @@ if (page === 'chat') {
 
 	// EVENT HANDLERS
 	$(document).ready(() => {
+		$('.pageContentContainer').css({ display: 'flex', height: '100%' });
 		socket.emit('join room', cid);
 		socket.on('typing', () => {
 			$('.typingDots').show();
@@ -435,6 +453,10 @@ if (page === 'chat') {
 		}
 	});
 }
+
+$(document).ready(() => {
+	followersAndFollowingHandler.listContacts(userLoggedIn);
+});
 
 // FOLLOWERS AND FOLLOWING
 if (page === 'followersAndFollowing') {

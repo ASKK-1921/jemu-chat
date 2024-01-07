@@ -91,14 +91,14 @@ const createPostHtml = (postData, largeFont = false) => {
 		if (postData.pinned === true) {
 			pinnedClass = 'active';
 			dataTarget = '#unpinPostModalCenter';
-			pinnedPostText = `<i class='fa-solid fa-thumbtack'></i> <span>Pinned post</span>`;
+			pinnedPostText = `<span class='material-symbols-outlined'>push_pin</span> <span>Pinned post</span>`;
 		}
 		buttons = `<button class='pinButton ${pinnedClass}' data-id='${postData._id}' data-bs-toggle='modal' data-bs-target='${dataTarget}'>
-                          <i class='fa-solid fa-thumbtack'></i>
-                        </button>
-                        <button data-id='${postData._id}' data-bs-toggle='modal' data-bs-target='#deletePostModalCenter'>
-                          <i class='fa-solid fa-trash'></i>
-                        </button>`;
+                  <span class='material-symbols-outlined'>push_pin</span>
+								</button>
+								<button data-id='${postData._id}' data-bs-toggle='modal' data-bs-target='#deletePostModalCenter'>
+									<span class='material-symbols-outlined'>delete</span>
+								</button>`;
 	}
 
 	return `<div class='post ${largeFontClass}' data-id='${postData._id}'>
@@ -124,20 +124,20 @@ const createPostHtml = (postData, largeFont = false) => {
                 <div class='postFooter'>
                   <div class='postButtonContainer'>
                     <button data-bs-toggle='modal' data-bs-target='#replyModalCenter'>
-                      <i class='fa-regular fa-comments'></i>
+										<span class='material-symbols-outlined'>add_comment</span>
                     </button>
                   </div>
                   <div class='postButtonContainer green'>
                     <button class='shareButton ${shareButtonActiveClass}'>
-                    <i class='fa-solid fa-repeat'></i>
-                    <span>${postData.shareUsers.length || ''}</span>
+                    <span class='material-symbols-outlined'>share</span>
                     </button>
+										<span class='shareButtonCount'>${postData.shareUsers.length || ''}</span>
                   </div>
                   <div class='postButtonContainer red'>
                     <button class='likeButton ${likeButtonActiveClass}'>
-                      <i class='fa-regular fa-heart'></i>
-                      <span>${postData.likes.length || ''}</span>
+											<span class='material-symbols-outlined'>favorite</span>
                     </button>
+										<span class='likeButtonCount'>${postData.likes.length || ''}</span>
                   </div>
                 </div>
               </div>
@@ -180,8 +180,7 @@ const outputPostsWithReplies = (results, container) => {
 
 const createUserHtml = (userData, showFollowButton) => {
 	const name = `${userData.firstName} ${userData.lastName}`;
-	// TODO: may need to fix the userLoggedIn part here
-	const isFollowing = userLoggedIn.following && userLoggedIn.following.includes(userData._id);
+	const isFollowing = userData.followers && userData.followers.includes(userLoggedIn);
 
 	const text = isFollowing ? 'Following' : 'Follow';
 	const buttonClass = isFollowing ? 'followButton following' : 'followButton';
@@ -209,10 +208,10 @@ const createUserHtml = (userData, showFollowButton) => {
           </div>`;
 };
 
-const outputUsers = (results, container) => {
+const outputUsers = (results, container, showFollowButton = true) => {
 	container.html('');
 	results.forEach((result) => {
-		const html = createUserHtml(result, true);
+		const html = createUserHtml(result, showFollowButton);
 		container.append(html);
 	});
 	if (results.length === 0) {
@@ -302,8 +301,10 @@ const refreshMessagesBadge = () => {
 		const numberOfResults = data.length;
 		if (numberOfResults > 0) {
 			$('#messagesBadge').text(numberOfResults).addClass('active');
+			$('#messagesLink').addClass('active');
 		} else {
 			$('#messagesBadge').text('').removeClass('active');
+			$('#messagesLink').removeClass('active');
 		}
 	});
 };
@@ -327,8 +328,10 @@ const refreshNotificationsBadge = () => {
 		const numberOfResults = data.length;
 		if (numberOfResults > 0) {
 			$('#notificationsBadge').text(numberOfResults).addClass('active');
+			$('#notificationsLink').addClass('active');
 		} else {
 			$('#notificationsBadge').text('').removeClass('active');
+			$('#notificationsLink').removeClass('active');
 		}
 	});
 };

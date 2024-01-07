@@ -46,7 +46,7 @@ const likePost = (postId, button, userLoggedIn) => {
 		url: `${postRoutesUrl}/${postId}/like`,
 		type: 'PUT',
 		success: (data) => {
-			button.find('span').text(data.likes.length || '');
+			button.next('.likeButtonCount').text(data.likes.length || '');
 			if (data.likes.includes(userLoggedIn)) {
 				button.addClass('active');
 				emitNotification(data.postedBy);

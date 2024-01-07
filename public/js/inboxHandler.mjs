@@ -13,6 +13,7 @@ const outputChatList = (chatList, container) => {
 };
 
 const listChats = () => {
+	// TODO: Separate direct chats and group chats
 	$.get(chatRoutesUrl, (data, status, xhr) => {
 		if (xhr.status === 400) {
 			alert('Could not get the chat list.');

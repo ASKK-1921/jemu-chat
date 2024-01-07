@@ -7,5 +7,11 @@ const listUsers = (profileUserId, selectedTab) => {
 	});
 };
 
+const listContacts = (profileUserId) => {
+	$.get(`${userRoutesUrl}/${profileUserId}/following`, (results) => {
+		outputUsers(results, $('.contactList'), false);
+	});
+};
+
 // eslint-disable-next-line import/prefer-default-export
-export { listUsers };
+export { listUsers, listContacts };

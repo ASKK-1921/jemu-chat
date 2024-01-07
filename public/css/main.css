@@ -1,4 +1,15 @@
+/* Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Chakra+Petch&family=Russo+One&display=swap');
+
 :root {
+  --purple: #5852F2;
+  --purpleDark: #2C2973;
+  --purpleTransparent: #555BD957;
+  --navy: #171640;
+  --yellow: #D4F266;
+  --blueHighlight: #0d6efd40;
+  --redBadges: #d63384;
+
   --blue: #1fa2f1;
   --blueLight: #9bd1f9;
   --blueBackground: #d4edff99;
@@ -12,12 +23,28 @@
   --greenBackground: #17bf631a;
   --blackClear: #00000099;
   --spacing: 15px;
+
+  --blueDark: #3507AB;
+  --blueRobinEgg: #66ced6;
+  --blueRobinEggTransparent: #66ced657;
+  --apricot: #ffc6ac;
+  --lavender: #b493e0;
+  --violet: #1d074b;
+}
+
+.material-symbols-outlined {
+  font-variation-settings:
+  'FILL' 0,
+  'wght' 700,
+  'GRAD' 0,
+  'opsz' 24;
+  display: flex;
 }
 
 html, body {
   height: 100%;
   min-height: 100%;
-  background-color: #fff;
+  /* background-color: var(--purple); */
   font-weight: 300;
 }
 
@@ -44,29 +71,86 @@ h1 {
   margin: 0;
 }
 
-nav {
+#myDetailsArea {
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: center;
+  width: 100%;
+  padding-top: var(--spacing);
+  padding-bottom: var(--spacing);
+  border-bottom: 1px solid var(--blueRobinEgg);
+}
+
+#myDetailsArea .header {
+  padding-top: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#myDetailsArea .header span {
+  padding: 0;
+  pointer-events: none;
+}
+
+#myDetailsArea .myName {
+  color: var(--yellow);
+  overflow: hidden;
+}
+
+#myDetailsArea .userImageContainer {
+  border: 2px solid var(--blueRobinEgg);
+  border-radius: 50%;
+}
+
+
+nav {
+  background: linear-gradient(.25turn, var(--purple), 90%, white);
+  /* background-color: var(--violet); */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
   height: 100%;
+  font-family: 'Russo One', sans-serif;
 }
 
 nav a {
   position: relative;
   padding: 10px;
-  font-size: 30px;
-  width: 55px;
+  font-size: 12px;
+  width: 100%;
+  min-width: 55px;
   height: 55px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #212529;
+  color: var(--yellow);
+  margin-top: 5px;
 }
 
 nav a:hover {
-  background-color: var(--buttonhoverbg);
-  color: var(--blue);
-  border-radius: 50%;
+  background-color: var(--blueRobinEgg);
+  color: var(--purple);
+  border-radius: 15px;
+}
+
+nav a:last-child:hover {
+  color: var(--red);
+}
+
+.navText {
+  display:none;
+  margin-left: 5px;
+}
+
+@media (min-width: 992px) {
+  /* Set to 992 px to match bootstrap col-md */
+  .navText {
+    display: block;
+  }
+  nav a {
+    justify-content:flex-start;
+  }
 }
 
 .wrapper {
@@ -91,15 +175,46 @@ button i, button span {
 }
 
 nav a.blue {
-  color: var(--blue);
+  color: var(--purple);
 }
 
 .mainSectionContainer {
+  height: 100%;
   padding: 0;
-  border-left: 1px solid var(--greyLight);
-  border-right: 1px solid var(--greyLight);
+  border-left: 1px solid var(--blueRobinEgg);
+  border-right: 1px solid var(--blueRobinEgg);
   display: flex;
   flex-direction: column;
+  /* overflow-y: scroll; */
+}
+
+/* .mainSectionContainer :not(.titleContainer) {
+  overflow-y: scroll;
+} */
+
+/* .mainSectionContainer .resultsContainer, .mainSectionContainer .postsContainer, .mainSectionContainer .profileContentContainer {
+  overflow-y: scroll;
+} */
+
+.mainSectionContainer .pageContentContainer {
+  overflow-y: scroll;
+  /* display: flex;
+  height: 100%; */
+}
+
+.mainSectionContainer .stickyTop {
+  position: sticky;
+  top: 0;
+  background-color: white;
+}
+
+.contactList .user {
+  display: flex;
+  padding: var(--spacing) 0;
+}
+
+.postsContainer {
+  /* overflow-y: scroll; */
 }
 
 .titleContainer {
@@ -107,7 +222,7 @@ nav a.blue {
   padding: 0 var(--spacing);
   display: flex;
   align-items: center;
-  border-bottom: 1px solid var(--greyLight);
+  border-bottom: 1px solid var(--blueRobinEgg);
   flex-shrink: 0;
 }
 
@@ -118,7 +233,7 @@ nav a.blue {
 .postFormContainer {
   display: flex;
   padding: var(--spacing);
-  border-bottom: 5px solid var(--greyLight);
+  border-bottom: 5px solid var(--blueRobinEgg);
   flex-shrink: 0;
 }
 
@@ -145,7 +260,7 @@ nav a.blue {
 
 .textareaContainer {
   flex: 1;
-  padding-left: var(--spacing);
+  /* padding-left: var(--spacing); */
 }
 
 .textareaContainer textarea {
@@ -156,11 +271,12 @@ nav a.blue {
 }
 
 #submitPostButton {
-  background-color: var(--blue);
+  background-color: var(--purple);
   color: #ffffff;
   border: none;
   border-radius: 40px;
   padding: 7px 15px;
+  float: right;
 }
 
 #submitPostButton:disabled {
@@ -172,7 +288,7 @@ nav a.blue {
   flex-direction: column;
   padding: var(--spacing);
   cursor: pointer;
-  border-bottom: 1px solid var(--greyLight);
+  border-bottom: 1px solid var(--blueRobinEgg);
   flex-shrink: 0;
 }
 
@@ -198,6 +314,7 @@ nav a.blue {
 }
 
 .postFooter {
+  padding-top: var(--spacing);
   display: flex;
   align-items: center;
 }
@@ -208,7 +325,7 @@ nav a.blue {
 }
 
 .postFooter .postButtonContainer button {
-  padding: 0 5px;
+  padding: 5px;
 }
 
 .header a:hover {
@@ -221,7 +338,7 @@ nav a.blue {
 
 .postButtonContainer button:hover {
   background-color: #d4edff;
-  color: var(--blue);
+  color: var(--purple);
   border-radius: 50%;
 }
 
@@ -229,7 +346,7 @@ nav a.blue {
   color: var(--red);
 }
 
-.postButtonContainer.red button:hover {
+.postButtonContainer.red button:first-child:hover {
   color: var(--red);
   background-color: var(--redBackground);
 }
@@ -243,8 +360,14 @@ nav a.blue {
   background-color: var(--greenBackground);
 }
 
+.shareButtonCount, .likeButtonCount {
+  display: flex;
+  align-items: center;
+  padding-left: 5px;
+}
+
 .postActionContainer {
-  padding-left: 35px;
+  padding-left: calc(50px + var(--spacing));
   font-size: 13px;
   color: var(--greyText);
   margin-bottom: var(--spacing);
@@ -255,7 +378,7 @@ nav a.blue {
 }
 
 .replyFlag a {
-  color: var(--blue);
+  color: var(--purple);
 }
 
 .post.largeFont .postBody, .post.largeFont .postFooter {
@@ -263,10 +386,11 @@ nav a.blue {
 }
 
 .post.largeFont {
-  background-color: var(--buttonhoverbg);
+  background-color: var(--blueHighlight);
 }
 
 .postContentContainer .header {
+  padding-bottom: 5px;
   display: flex;
 }
 
@@ -280,7 +404,7 @@ nav a.blue {
 
 .profileHeaderContainer .coverPhotoSection {
   height: 180px;
-  background-color: var(--blue);
+  background-color: var(--purple);
   position: relative;
 }
 
@@ -303,11 +427,15 @@ nav a.blue {
   text-align: right;
   padding: var(--spacing);
   min-height: 66px;
+  align-items: center;
+  display: flex;
+  width: 100%;
+  justify-content: flex-end;
 }
 
 .profileButton, .followButton {
-  border: 1px solid var(--blue);
-  color: var(--blue);
+  border: 1px solid var(--purple);
+  color: var(--purple);
   font-weight: bold;
   padding: 5px 15px;
   border-radius: 60px;
@@ -317,11 +445,11 @@ nav a.blue {
 
 .profileButton:hover, .followButton:hover {
   background-color: var(--blueBackground);
-  color: var(--blue);
+  color: var(--purple);
 }
 
 .followButton.following {
-  background-color: var(--blue);
+  background-color: var(--purple);
   color: #fff;
 }
 
@@ -350,7 +478,7 @@ nav a.blue {
 
 .tabsContainer {
   display: flex;
-  border-bottom: 1px solid var(--greyLight);
+  border-bottom: 1px solid var(--blueRobinEgg);
   flex-shrink: 0;
 }
 
@@ -365,12 +493,12 @@ nav a.blue {
 }
 
 .tab.active {
-  color: var(--blue);
-  border-bottom: 2px solid var(--blue);
+  color: var(--purple);
+  border-bottom: 2px solid var(--purple);
 }
 
 .tab:hover {
-  color: var(--blue);
+  color: var(--purple);
   background-color: var(--blueBackground);
 }
 
@@ -381,12 +509,13 @@ nav a.blue {
 .resultsContainer {
   display: flex;
   flex-direction: column;
+  /* overflow-y: scroll; */
 }
 
 .resultsContainer .user {
   padding: var(--spacing);
   display: flex;
-  border: 1px solid var(--greyLight);
+  border: 1px solid var(--blueRobinEgg);
 }
 
 .user .userDetailsContainer {
@@ -410,6 +539,13 @@ nav a.blue {
   display: none;
 }
 
+.profilePictureButton span, .coverPhotoButton span{
+  background: var(--violet);
+  padding: 5px;
+  border-radius: 50%;
+  color: var(--yellow);
+}
+
 .userImageContainer:hover .profilePictureButton, .coverPhotoSection:hover .coverPhotoButton {
   display: block;
 }
@@ -419,7 +555,7 @@ nav a.blue {
 }
 
 .coverPhotoSection {
-  border-bottom: 1px solid var(--greyLight);
+  border-bottom: 1px solid var(--blueRobinEgg);
 }
 
 .coverPhotoContainer {
@@ -442,16 +578,23 @@ nav a.blue {
 }
 
 .pinButton.active {
-  color: var(--blue);
+  color: var(--purple);
+}
+
+.pinButton.active span {
+  font-variation-settings:
+  'FILL' 1;
 }
 
 .pinnedPostText {
+  display: flex;
+  align-items: center;
   font-size: 12px;
   color: var(--greyText);
 }
 
 .pinnedPostContainer {
-  border-bottom: 10px solid #e6ecf0;
+  border-bottom: 10px solid var(--blueRobinEgg);
 }
 
 .searchBarContainer {
@@ -471,7 +614,7 @@ nav a.blue {
   width: 100%;
   padding: 5px 15px 5px 40px;
   border-radius: 50px;
-  background-color: var(--greyLight);
+  background-color: var(--blueRobinEggTransparent);
   border: none;
   color: var(--greyText);
 }
@@ -485,7 +628,7 @@ nav a.blue {
 }
 
 .chatTitleBar {
-  border-bottom: 1px solid var(--greyLight);
+  border-bottom: 1px solid var(--blueRobinEgg);
   display: flex;
   align-items: center;
   min-height: 60px;
@@ -505,7 +648,7 @@ nav a.blue {
 
 #createChatButton {
   border: none;
-  background-color: var(--blue);
+  background-color: var(--purple);
   color: white;
   padding: 7px 20px;
   margin: 10px auto;
@@ -513,7 +656,7 @@ nav a.blue {
 }
 
 #createChatButton:disabled {
-  background-color: var(--greyLight);
+  background-color: var(--blueRobinEgg);
   color: var(--greyText);
 }
 
@@ -532,11 +675,11 @@ nav a.blue {
   display: flex;
   align-items: center;
   flex-shrink: 0;
-  border-bottom: 1px solid var(--greyLight);
+  border-bottom: 1px solid var(--blueRobinEgg);
 }
 
 .resultsListItem:hover {
-  background-color: var(--buttonhoverbg);
+  background-color: var(--blueRobinEgg);
 }
 
 .resultsDetailsContainer {
@@ -591,7 +734,7 @@ nav a.blue {
 }
 
 .chatTitleBarContainer {
-  border-bottom: 1px solid var(--greyLight);
+  border-bottom: 1px solid var(--blueRobinEgg);
   display: flex;
   align-items: center;
   padding: var(--spacing);
@@ -604,7 +747,7 @@ nav a.blue {
 }
 
 #chatName:hover {
-  border: 1px solid var(--greyLight);
+  border: 1px solid var(--blueRobinEgg);
   cursor: text;
 }
 
@@ -632,7 +775,7 @@ nav a.blue {
 }
 .chatContainer .footer button {
   background-color: transparent;
-  color: var(--blue);
+  color: var(--purple);
   font-size: 24px;
 }
 
@@ -717,7 +860,7 @@ nav a.blue {
 }
 
 .chatMessages .message.mine .messageBody {
-  background-color: var(--blue);
+  background-color: var(--purple);
   color: white;
 }
 
@@ -804,8 +947,24 @@ nav a.blue {
   pointer-events: none;
 }
 
+@keyframes pulse {
+  0% {
+    font-variation-settings: 'wght' 100;
+  }
+  50% {
+    font-variation-settings: 'wght' 700;
+  }
+  100% {
+    font-variation-settings: 'wght' 100;
+  }
+}
+
+#notificationsLink.active .material-symbols-outlined, #messagesLink.active .material-symbols-outlined {
+  animation: pulse 3s infinite;
+}
+
 #notificationsBadge, #messagesBadge {
-  background-color: var(--red);
+  background-color: var(--redBadges);
   height: 25px;
   width: 25px;
   border-radius: 50%;
