@@ -46,7 +46,7 @@ exports.getFilteredPosts = catchAsync(async (req, res, next) => {
 				objectIdArray.push(user);
 			});
 
-			objectIdArray.push(req.session.user._id);
+			// objectIdArray.push(req.session.user._id);
 			query.postedBy = { $in: objectIdArray };
 		}
 		delete query.followingOnly;
