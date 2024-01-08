@@ -1,8 +1,8 @@
 extends layouts/main-layout.pug 
 
 block content
-  .resultsContainer
+  .resultsContainer(data-mode=inboxType)
 
 block headerButton
   a(href="/messages/new")
-    i.fa-solid.fa-plus-square
+    +icon('add_box')

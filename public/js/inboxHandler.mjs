@@ -12,9 +12,9 @@ const outputChatList = (chatList, container) => {
 	}
 };
 
-const listChats = () => {
+const listChats = (mode) => {
 	// TODO: Separate direct chats and group chats
-	$.get(chatRoutesUrl, (data, status, xhr) => {
+	$.get(chatRoutesUrl, { inboxType: mode }, (data, status, xhr) => {
 		if (xhr.status === 400) {
 			alert('Could not get the chat list.');
 			return;

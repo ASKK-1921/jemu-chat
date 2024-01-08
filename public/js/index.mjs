@@ -469,7 +469,9 @@ if (page === 'followersAndFollowing') {
 
 // INBOX
 if (page === 'inbox') {
-	inboxHandler.listChats();
+	// TODO: make the groupChat variable dynamic on page load
+	const { mode } = $('[data-mode]')[0].dataset;
+	inboxHandler.listChats(mode);
 }
 
 // NOTIFICATIONS

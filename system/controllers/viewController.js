@@ -156,7 +156,14 @@ exports.getNotificationsPage = (req, res, next) => {
 
 // Inbox
 exports.getInboxPage = (req, res, next) => {
-	renderPage(req, res, 200, 'inbox');
+	const payload = {};
+	payload.inboxType = req.url.slice(1);
+
+	if (payload.inboxType === 'groups') {
+		payload.pageTitle = 'Groups';
+	}
+
+	renderPage(req, res, 200, 'inbox', payload);
 };
 
 exports.getSingleChat = catchAsync(async (req, res, next) => {

@@ -15,6 +15,7 @@ router.get('/profile/:username', viewController.getUserProfilePage);
 router.get('/profile/:username/:dataType', viewController.getProfileDetailsPage);
 router.get('/notifications', viewController.getNotificationsPage);
 router.get('/inbox', viewController.getInboxPage);
+router.get('/groups', viewController.getInboxPage);
 router.get('/messages/new', viewController.getNewChatPage);
 router.get('/messages/:chatId', viewController.getSingleChatPage);
 router.get('/search', viewController.getSearchPage);
