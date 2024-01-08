@@ -10,12 +10,14 @@ import * as inboxHandler from './inboxHandler.mjs';
 import * as notificationsHandler from './notificationsHandler.mjs';
 import * as postHandler from './postHandler.mjs';
 import * as searchHandler from './searchHandler.mjs';
+// eslint-disable-next-line import/no-cycle
 import * as commonHandler from './commonHandler.mjs';
 
 // GLOBAL VARIABLES
 // const page = $('body').data('page');
 let connected = false;
 let cropper;
+let onlineUsers = [];
 const selectedUsers = [];
 const { page } = $('[data-page]')[0].dataset;
 const userLoggedIn = $('body').data('uid');
@@ -41,6 +43,22 @@ socket.on('notification received', () => {
 	});
 });
 
+socket.on('update online users', (users) => {
+	onlineUsers = users;
+
+	// TODO: make this a little more elegant without a timer
+	setTimeout(() => {
+		$('.userStatusBadge').each(function () {
+			const elementId = this.id.split('_')[0];
+			if (onlineUsers.some((user) => user.userId === elementId)) {
+				this.classList.add('active');
+			} else {
+				this.classList.remove('active');
+			}
+		});
+	}, 1000);
+});
+
 const emitNotification = (userId) => {
 	if (userId === userLoggedIn) {
 		return;
@@ -48,7 +66,23 @@ const emitNotification = (userId) => {
 	socket.emit('notification received', userId);
 };
 
+const handleFocus = async () => {
+	socket.emit('setup', userLoggedIn);
+};
+
+const handleBlur = () => {
+	setTimeout(() => {
+		if (userLoggedIn) {
+			socket.emit('offline');
+		}
+	}, 60000);
+};
+
+$(window).on('focus', handleFocus);
+$(window).on('blur', handleBlur);
+
 $(document).ready(() => {
+	followersAndFollowingHandler.listContacts(userLoggedIn);
 	commonFunctions.refreshMessagesBadge();
 	commonFunctions.refreshNotificationsBadge();
 });
@@ -62,6 +96,7 @@ $('#postTextarea, #replyTextarea').keyup((event) => {
 	const submitButton = isModal ? $('#submitReplyButton') : $('#submitPostButton');
 
 	if (submitButton.length === 0) {
+		// eslint-disable-next-line no-alert
 		return alert('No submit button found!');
 	}
 
@@ -87,6 +122,7 @@ $('#submitPostButton, #submitReplyButton').click((event) => {
 	if (isModal) {
 		const { id } = button.data();
 		if (id == null) {
+			// eslint-disable-next-line no-alert
 			return alert('Button ID is null');
 		}
 		postData.replyTo = id;
@@ -110,6 +146,7 @@ $('#filePhoto').change((event) => {
 			if (cropper !== undefined) {
 				cropper.destroy();
 			}
+			// eslint-disable-next-line no-undef
 			cropper = new Cropper(image, {
 				aspectRatio: 1 / 1,
 				background: false,
@@ -129,6 +166,7 @@ $('#coverPhoto').change((event) => {
 			if (cropper !== undefined) {
 				cropper.destroy();
 			}
+			// eslint-disable-next-line no-undef
 			cropper = new Cropper(image, {
 				aspectRatio: 16 / 9,
 				background: false,
@@ -453,10 +491,6 @@ if (page === 'chat') {
 		}
 	});
 }
-
-$(document).ready(() => {
-	followersAndFollowingHandler.listContacts(userLoggedIn);
-});
 
 // FOLLOWERS AND FOLLOWING
 if (page === 'followersAndFollowing') {

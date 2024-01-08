@@ -248,6 +248,7 @@ nav a.blue {
 }
 
 .userImageContainer {
+  position: relative;
   width: 50px;
   height: 50px;
 }
@@ -961,6 +962,21 @@ nav a.blue {
 
 #notificationsLink.active .material-symbols-outlined, #messagesLink.active .material-symbols-outlined {
   animation: pulse 3s infinite;
+}
+
+.userStatusBadge {
+  background-color: var(--green);
+  height: 10px;
+  width: 10px;
+  border-radius: 50%;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  visibility: hidden;
+}
+
+.userStatusBadge.active {
+  visibility: visible;
 }
 
 #notificationsBadge, #messagesBadge {

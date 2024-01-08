@@ -66,10 +66,16 @@ process.on('unhandledRejection', (err) => {
 });
 
 // Handle all socket.io events
+let onlineUsers = [];
+
 io.on('connection', (socket) => {
 	socket.on('setup', (userData) => {
+		if (!onlineUsers.some((user) => user.userId === userData)) {
+			onlineUsers.push({ userId: userData, socketId: socket.id });
+		}
 		socket.join(userData);
 		socket.emit('connected');
+		socket.emit('update online users', onlineUsers);
 	});
 	socket.on('join room', (room) => {
 		socket.join(room);
@@ -94,5 +100,13 @@ io.on('connection', (socket) => {
 			}
 			socket.in(user._id).emit('message received', newMessage);
 		});
+	});
+	socket.on('disconnect', () => {
+		onlineUsers = onlineUsers.filter((user) => user.socketId !== socket.id);
+		socket.emit('update online users', onlineUsers);
+	});
+	socket.on('offline', () => {
+		onlineUsers = onlineUsers.filter((user) => user.socketId !== socket.id);
+		socket.emit('update online users', onlineUsers);
 	});
 });

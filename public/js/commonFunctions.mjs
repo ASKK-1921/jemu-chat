@@ -196,6 +196,7 @@ const createUserHtml = (userData, showFollowButton) => {
 	return `<div class='user'>
             <div class='userImageContainer'>
               <img src='${userData.profilePicture}' alt='profile picture'>
+							<span id='${userData._id}_status' class='userStatusBadge'></span>
             </div>
             <div class='userDetailsContainer'>
               <div class='header'>
