@@ -3,12 +3,23 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      nodejs: 10
+      nodejs: 16
     commands:
-      #install dependencies needed for running test
       - npm install
+  pre_build:
+    commands:
+      - echo Installing source NPM dependencies...
+  build:
+    commands:
+      - echo Build started on `date`
       - npm run build
-      # - npm run start
-
-      #Upgrade AWS CLI to the latest version
-      - pip install --upgrade awscli
+  post_build:
+    commands:
+      - echo Build completed on `date`
+artifacts:
+  type: zip
+  files:
+    - '**/*'
+cache:
+  paths:
+    - node_modules
