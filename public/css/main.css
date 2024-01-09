@@ -314,7 +314,7 @@ nav a.blue {
 }
 
 .username, .date {
-  color: var(--greyText);
+  color: var(--blueRobinEgg);
 }
 
 .postFooter {
@@ -683,7 +683,7 @@ nav a.blue {
 }
 
 .resultsListItem:hover {
-  background-color: var(--blueRobinEgg);
+  background-color: var(--blueRobinEgg) !important;
 }
 
 .resultsDetailsContainer {
