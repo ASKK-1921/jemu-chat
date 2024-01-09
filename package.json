@@ -56,5 +56,8 @@
 	},
 	"overrides": {
 		"glob-parent": "6.0.2"
+	},
+	"engines": {
+		"node": "20.9.0"
 	}
 }
