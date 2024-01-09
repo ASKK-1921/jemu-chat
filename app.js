@@ -6,6 +6,7 @@ const mongoSanitize = require('express-mongo-sanitize');
 // const xss = require('xss-clean');
 // const cookieParser = require('cookie-parser');
 const session = require('express-session');
+const MemoryStore = require('memorystore')(session);
 const morgan = require('morgan');
 const compression = require('compression');
 // const rateLimit = require('express-rate-limit');
@@ -97,8 +98,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Start a session for the user
 app.use(
 	session({
+		cookie: { maxAge: 86400000 },
+		store: new MemoryStore({
+			checkPeriod: 86400000, // prune expired entries every 24h
+		}),
+		resave: false,
 		secret: process.env.SESSION_SECRET,
-		resave: true,
 		saveUninitialized: false,
 	})
 );
