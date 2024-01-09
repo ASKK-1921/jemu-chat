@@ -8,17 +8,21 @@ const babel = require('gulp-babel');
 const uglify = require('gulp-uglify');
 const rename = require('gulp-rename');
 
-const env = 'development';
+let env = 'development';
 
 function onError(err) {
-	console.log(err);
-	// const splitFilename = err.file.split('/');
-	// const fileName = splitFilename[splitFilename.length - 1];
-	// /* eslint-disable no-console */
-	// console.log('\u001b[1;31m *** Error ***');
-	// console.log(`\u001b[1;32m・・・Error in file '${fileName}' on line ${err.line}・・・`);
-	// /* eslint-enable no-console */
+	const splitFilename = err.file.split('/');
+	const fileName = splitFilename[splitFilename.length - 1];
+	/* eslint-disable no-console */
+	console.log('\u001b[1;31m *** Error ***');
+	console.log(`\u001b[1;32m・・・Error in file '${fileName}' on line ${err.line}・・・`);
+	/* eslint-enable no-console */
 	this.emit('end');
+}
+
+function setProd(cb) {
+	env = 'production';
+	cb();
 }
 
 const paths = {
@@ -37,20 +41,24 @@ function scripts() {
 		.pipe(babel())
 		.pipe(uglify())
 		.pipe(rename('bundle.min.js'))
-		.pipe(gulp.dest(paths.scripts.dest))
-		.on('error', onError);
+		.pipe(gulp.dest(paths.scripts.dest));
 }
 
 function watch() {
 	gulp.watch(paths.scripts.src, scripts);
 }
 
+const build = gulp.parallel(setProd, scripts);
+
 function defaultTask(cb) {
+	// eslint-disable-next-line no-console
 	console.log('default task called');
 	cb();
 }
 
 exports.scripts = scripts;
 exports.watch = watch;
+
+exports.build = build;
 
 exports.default = defaultTask;
