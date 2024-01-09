@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 // DEPENDENCIES
 const catchAsync = require('../utils/catchAsync');
 const User = require('../models/userModel');

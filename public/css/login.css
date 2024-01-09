@@ -1,5 +1,5 @@
 body {
-  background-color: #0A0031;
+  background-color: #5852F2;
 }
 
 .wrapper {
@@ -9,6 +9,7 @@ body {
 }
 
 .loginContainer {
+  display: inline-table;
   padding: 20px;
   width: 80%;
   max-width: 500px;
@@ -19,6 +20,11 @@ body {
   box-shadow: 0 1px 4px rgba(0,0,0,0.3);
   -webkit-box-shadow: 0 1px 4px rgba(0,0,0,0.3);
   -moz-box-shadow: 0 1px 4px rgba(0,0,0,0.3); 
+}
+
+#loginLogo {
+  width: 200px;
+  height: 200px;
 }
 
 form {

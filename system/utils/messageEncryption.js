@@ -10,7 +10,6 @@ const crypto = require('crypto');
  * @returns {render} Renders the page
  */
 exports.encrypt = (messageText) => {
-	// const messageText = req.body.content;
 	// Create a random 16-digit intialisation vector
 	const vector = crypto.randomBytes(16);
 	// Encrypt the messageText uscing encryption algorithm, private key, and vector

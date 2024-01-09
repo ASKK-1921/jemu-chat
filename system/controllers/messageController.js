@@ -16,6 +16,7 @@ const insertNotification = (chat, message) => {
 
 exports.createMessage = catchAsync(async (req, res, next) => {
 	if (!req.body.content || !req.body.chatId) {
+		// eslint-disable-next-line no-console
 		console.log('Invalid data pass into the request');
 		return res.sendStatus(400);
 	}
@@ -38,6 +39,7 @@ exports.createMessage = catchAsync(async (req, res, next) => {
 	});
 
 	if (!createdMessage) {
+		// eslint-disable-next-line no-console
 		console.log('Could not create message');
 		res.sendStatus(400);
 	}

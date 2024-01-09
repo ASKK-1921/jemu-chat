@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 // DEPENDENCIES
 const multer = require('multer');
 const path = require('path');

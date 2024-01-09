@@ -7,8 +7,6 @@ const messageEncryption = require('../utils/messageEncryption');
 exports.getAllChats = catchAsync(async (req, res, next) => {
 	const { query } = req;
 
-	// const inboxType = query.inboxType === 'groups';
-
 	let chats;
 
 	if (query.inboxType) {
@@ -25,6 +23,7 @@ exports.getAllChats = catchAsync(async (req, res, next) => {
 	}
 
 	if (!chats) {
+		// eslint-disable-next-line no-console
 		console.log('Could not find chats');
 		return res.status(404);
 	}
@@ -49,6 +48,7 @@ exports.getAllChats = catchAsync(async (req, res, next) => {
 
 exports.createChat = catchAsync(async (req, res, next) => {
 	if (!req.body.users) {
+		// eslint-disable-next-line no-console
 		console.log('Users parameter not sent with request');
 		return res.sendStatus(400);
 	}
@@ -56,6 +56,7 @@ exports.createChat = catchAsync(async (req, res, next) => {
 	const users = JSON.parse(req.body.users);
 
 	if (users.length === 0) {
+		// eslint-disable-next-line no-console
 		console.log('Users array is empty');
 		return res.sendStatus(400);
 	}
@@ -78,6 +79,7 @@ exports.createChat = catchAsync(async (req, res, next) => {
 	const chat = await Chat.create(chatData);
 
 	if (!chat) {
+		// eslint-disable-next-line no-console
 		console.log('Error creating chat');
 		return res.sendStatus(400);
 	}
@@ -92,6 +94,7 @@ exports.getSingleChat = catchAsync(async (req, res, next) => {
 	}).populate('users');
 
 	if (!chat) {
+		// eslint-disable-next-line no-console
 		console.log('Could not find chat');
 		res.sendStatus(404);
 	}
@@ -103,6 +106,7 @@ exports.updateChat = catchAsync(async (req, res, next) => {
 	const chat = await Chat.findByIdAndUpdate(req.params.chatId, req.body);
 
 	if (!chat) {
+		// eslint-disable-next-line no-console
 		console.log('Could not update chat');
 		res.sendStatus(400);
 	}
@@ -114,6 +118,7 @@ exports.getMessages = catchAsync(async (req, res, next) => {
 	const messages = await Message.find({ chat: req.params.chatId }).populate('sender');
 
 	if (!messages) {
+		// eslint-disable-next-line no-console
 		console.log('Could not find messages');
 		res.sendStatus(404);
 	}
@@ -134,6 +139,7 @@ exports.markAsRead = catchAsync(async (req, res, next) => {
 	);
 
 	if (!messages) {
+		// eslint-disable-next-line no-console
 		console.log('Could not update messages');
 		res.sendStatus(400);
 	}

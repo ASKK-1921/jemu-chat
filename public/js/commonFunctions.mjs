@@ -37,6 +37,7 @@ const getPostIdFromElement = (element) => {
 	const postId = rootElement.data().id;
 
 	if (postId === undefined) {
+		// eslint-disable-next-line no-alert
 		return alert('Post ID undefined');
 	}
 	return postId;
@@ -44,6 +45,7 @@ const getPostIdFromElement = (element) => {
 
 const createPostHtml = (postData, largeFont = false) => {
 	if (postData == null) {
+		// eslint-disable-next-line no-alert
 		return alert('Post object is null');
 	}
 
@@ -59,6 +61,7 @@ const createPostHtml = (postData, largeFont = false) => {
 	const largeFontClass = largeFont ? 'largeFont' : '';
 
 	if (postedBy._id === undefined) {
+		// eslint-disable-next-line no-console
 		return console.log('User object not defined');
 	}
 
@@ -70,9 +73,11 @@ const createPostHtml = (postData, largeFont = false) => {
 	let replyFlag = '';
 	if (postData.replyTo && postData.replyTo._id) {
 		if (!postData.replyTo._id) {
+			// eslint-disable-next-line no-alert
 			return alert('Reply to is not populated');
 		}
 		if (!postData.replyTo.postedBy._id) {
+			// eslint-disable-next-line no-alert
 			return alert('Posted by is not populated');
 		}
 
@@ -241,6 +246,7 @@ const getChatName = (chatData) => {
 
 const getUserChatImageElement = (user) => {
 	if (!user || !user.profilePicture) {
+		// eslint-disable-next-line no-alert
 		return alert('User passed into function is invalid');
 	}
 	return `<img src="${user.profilePicture}" alt='User profile picture'/>`;
@@ -360,6 +366,7 @@ const refreshNotificationsBadge = () => {
 const getNotificationText = (notification) => {
 	const { userFrom } = notification;
 	if (!userFrom.firstName || !userFrom.lastName) {
+		// eslint-disable-next-line no-alert
 		return alert('userFrom data not populated');
 	}
 	const userFromName = `${userFrom.firstName} ${userFrom.lastName}`;

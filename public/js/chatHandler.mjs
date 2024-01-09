@@ -1,4 +1,5 @@
 import { chatRoutesUrl, messageRoutesUrl } from './apiRoutes.mjs';
+// eslint-disable-next-line import/no-cycle
 import { markAllMessagesAsRead } from './commonFunctions.mjs';
 
 const userLoggedIn = $('body').data('uid');
@@ -28,14 +29,6 @@ const createMessageHtml = (message, nextMessage, lastSenderId) => {
 
 	const isFirst = lastSenderId !== currentSenderId;
 	const isLast = nextSenderId !== currentSenderId;
-
-	console.log(message);
-	console.log(nextMessage);
-	console.log(lastSenderId);
-	console.log(currentSenderId);
-	console.log(nextSenderId);
-	console.log(isFirst);
-	console.log(isLast);
 
 	const isMine = message.sender._id === userLoggedIn;
 	let liClassName = isMine ? 'mine' : 'theirs';

@@ -17,6 +17,7 @@ exports.getNotifications = catchAsync(async (req, res, next) => {
 		.sort({ createdAt: -1 });
 
 	if (!notification) {
+		// eslint-disable-next-line no-console
 		console.log('Unable to load notification');
 		res.sendStatus(400);
 	}
@@ -31,6 +32,7 @@ exports.getLatestNotification = catchAsync(async (req, res, next) => {
 		.sort({ createdAt: -1 });
 
 	if (!notification) {
+		// eslint-disable-next-line no-console
 		console.log('Unable to load notification');
 		res.sendStatus(400);
 	}
@@ -42,6 +44,7 @@ exports.markAsRead = catchAsync(async (req, res, next) => {
 	const notification = await Notification.findByIdAndUpdate(req.params.id, { opened: true });
 
 	if (!notification) {
+		// eslint-disable-next-line no-console
 		console.log('Unable to update notification');
 		res.sendStatus(400);
 	}
@@ -58,6 +61,7 @@ exports.markAllAsRead = catchAsync(async (req, res, next) => {
 	);
 
 	if (!notifications) {
+		// eslint-disable-next-line no-console
 		console.log('Unable to update notifications');
 		res.sendStatus(400);
 	}

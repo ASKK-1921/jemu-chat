@@ -22,8 +22,6 @@
  * @returns {render} Renders the page
  */
 module.exports = (req, res, statusCode, page, payload = {}) => {
-	// const device = checkDevice(req) ? 'mobile/' : 'desktop/';
-	// const lang = languageManager(req, res);
 	payload.pageTitle = payload.pageTitle || page.charAt(0).toUpperCase() + page.slice(1);
 
 	if (req.session.user) {
@@ -32,6 +30,5 @@ module.exports = (req, res, statusCode, page, payload = {}) => {
 		payload.pageFileForJs = page;
 	}
 
-	// return res.status(200).render(`${device}/${page}.ejs`, { title, lang });
 	return res.status(statusCode).render(`${page}`, payload);
 };

@@ -13,9 +13,9 @@ const outputChatList = (chatList, container) => {
 };
 
 const listChats = (mode) => {
-	// TODO: Separate direct chats and group chats
 	$.get(chatRoutesUrl, { inboxType: mode }, (data, status, xhr) => {
 		if (xhr.status === 400) {
+			// eslint-disable-next-line no-alert
 			alert('Could not get the chat list.');
 			return;
 		}

@@ -1,7 +1,5 @@
 mixin createPostForm(userLoggedIn)
   .postFormContainer
-    //- .userImageContainer
-    //-   img(src=userLoggedIn.profilePicture, alt="User's profile picture")
     .textareaContainer
       textarea#postTextarea(placeholder="What's up?")
       .buttonsContainer
@@ -159,5 +157,4 @@ mixin myDetailsArea()
     .userDetailsContainer
       .header
         span.myName #{userLoggedIn.firstName}
-        //- a(href=`/profile/${userLoggedIn.username}`) #{userLoggedIn.firstName} #{userLoggedIn.lastName}
         span.username @#{userLoggedIn.username}

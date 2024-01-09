@@ -7,6 +7,7 @@ const getPost = (postId) => {
 		type: 'GET',
 		success: (data, status, xhr) => {
 			if (xhr.status === 204) {
+				// eslint-disable-next-line no-alert
 				alert('Could not find a post with this ID');
 				return;
 			}

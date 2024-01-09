@@ -395,7 +395,6 @@ if (page === 'home') {
 		homeHandler.getFilteredPosts();
 	});
 
-	// TODO: make the active class change on the tabs
 	const updateTabs = () => {
 		$('#filteredPostsTab').toggleClass('active');
 		$('#allPostsTab').toggleClass('active');
@@ -503,7 +502,6 @@ if (page === 'followersAndFollowing') {
 
 // INBOX
 if (page === 'inbox') {
-	// TODO: make the groupChat variable dynamic on page load
 	const { mode } = $('[data-mode]')[0].dataset;
 	inboxHandler.listChats(mode);
 }

@@ -1,5 +1,6 @@
 import { chatRoutesUrl, postRoutesUrl, userRoutesUrl } from './apiRoutes.mjs';
 import { createPostHtml, outputPosts } from './commonFunctions.mjs';
+// eslint-disable-next-line import/no-cycle
 import { emitNotification } from './index.mjs';
 
 const submitPostOrReply = (postData, textbox, button) => {
