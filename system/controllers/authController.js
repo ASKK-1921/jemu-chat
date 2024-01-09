@@ -26,6 +26,12 @@ exports.register = catchAsync(async (req, res, next) => {
 	// Create the default payload (used for reloading the page if needed)
 	const payload = { firstName, lastName, username, email };
 
+	const numberOfUsers = await User.countDocuments();
+	if (numberOfUsers >= 10) {
+		payload.errorMessage = 'Sorry, we are not accepting any more new users at this time. Please try again later.';
+		return renderPage(req, res, 409, 'register', payload);
+	}
+
 	// Confirm the necessary details exist
 	if (!firstName || !lastName || !username || !email || !password || !confirmPassword) {
 		// Necessary details not supplied, so reload with data and message
