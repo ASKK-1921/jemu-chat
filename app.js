@@ -49,7 +49,7 @@ app.all('*', (req, res, next) => {
 
 		// UNAUTHORISED ACCESS DETECTED
 		// Uncomment the next line to log anuthorised requests
-		// console.log(`${req.method} ${req.originalUrl} blocked from ${req.headers.host}`);
+		console.log(`${req.method} ${req.originalUrl} blocked from ${req.headers.host}`);
 		// Kill the request
 		return res.status(403).end();
 	}
