@@ -299,13 +299,33 @@ const showMessagePopup = (data) => {
 
 const refreshMessagesBadge = () => {
 	$.get(chatRoutesUrl, { unreadOnly: true }, (data) => {
-		const numberOfResults = data.length;
-		if (numberOfResults > 0) {
-			$('#messagesBadge').text(numberOfResults).addClass('active');
+		let inboxResults = 0;
+		let groupResults = 0;
+
+		if (data) {
+			data.forEach((notification) => {
+				if (notification.isGroupChat) {
+					groupResults += 1;
+				} else {
+					inboxResults += 1;
+				}
+			});
+		}
+
+		if (inboxResults > 0) {
+			$('#messagesBadge').text(inboxResults).addClass('active');
 			$('#messagesLink').addClass('active');
 		} else {
 			$('#messagesBadge').text('').removeClass('active');
 			$('#messagesLink').removeClass('active');
+		}
+
+		if (groupResults > 0) {
+			$('#groupsBadge').text(groupResults).addClass('active');
+			$('#groupsLink').addClass('active');
+		} else {
+			$('#groupsBadge').text('').removeClass('active');
+			$('#groupsLink').removeClass('active');
 		}
 	});
 };

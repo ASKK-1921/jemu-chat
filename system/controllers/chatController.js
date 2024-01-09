@@ -6,12 +6,23 @@ const messageEncryption = require('../utils/messageEncryption');
 
 exports.getAllChats = catchAsync(async (req, res, next) => {
 	const { query } = req;
-	const inboxType = query.inboxType === 'groups';
 
-	let chats = await Chat.find({ users: { $elemMatch: { $eq: req.session.user._id } }, isGroupChat: { $eq: inboxType } })
-		.populate('users')
-		.populate('latestMessage')
-		.sort({ updatedAt: -1 });
+	// const inboxType = query.inboxType === 'groups';
+
+	let chats;
+
+	if (query.inboxType) {
+		const inboxType = query.inboxType === 'groups';
+		chats = await Chat.find({ users: { $elemMatch: { $eq: req.session.user._id } }, isGroupChat: { $eq: inboxType } })
+			.populate('users')
+			.populate('latestMessage')
+			.sort({ updatedAt: -1 });
+	} else {
+		chats = await Chat.find({ users: { $elemMatch: { $eq: req.session.user._id } } })
+			.populate('users')
+			.populate('latestMessage')
+			.sort({ updatedAt: -1 });
+	}
 
 	if (!chats) {
 		console.log('Could not find chats');
