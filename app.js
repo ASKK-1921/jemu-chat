@@ -137,6 +137,11 @@ app.use(hpp({ whiteList: [] }));
 // Compression for better live performance
 app.use(compression());
 
+// Health check route for AWS
+app.use('/healthcheck', (req, res) => {
+	res.status(200).send('ok');
+});
+
 // Declare routers in order to mount them and set routes
 app.use('/api/v1/posts', postRoutes);
 app.use('/api/v1/users', userRoutes);
