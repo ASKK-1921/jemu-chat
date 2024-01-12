@@ -43,14 +43,15 @@ function setSocketPort(cb) {
 	}
 
 	// TODO: Update the regex to catch the live domain too
-	const socket3000 = /const socket = io\('http:\/\/localhost:3000'\);\n|\r/gm;
-	const socket8080 = /const socket = io\('http:\/\/localhost:8080'\);\n|\r/gm;
+	const socket3000 = /const socket = io.connect\('http:\/\/localhost:3000'\);\n|\r/gm;
+	const socket8080 = /const socket = io.connect\('http:\/\/jemu-chat.com:8080'\);\n|\r/gm;
 
 	gulp
 		.src(paths.scripts.src, { sourcemaps: true })
 		.pipe(replace(socket3000, ''))
 		.pipe(replace(socket8080, ''))
-		.pipe(replace(anchor, `${anchor}\nconst socket = io('${domain}:${socketPort}');`))
+		// .pipe(replace(anchor, `${anchor}\nconst socket = io('${domain}:${socketPort}');`))
+		.pipe(replace(anchor, `${anchor}\nconst socket = io.connect('${domain}:${socketPort}');`))
 		.pipe(rename('index.mjs'))
 		.pipe(gulp.dest(paths.scripts.dest));
 	cb();
@@ -71,6 +72,7 @@ function watch() {
 	gulp.watch(paths.scripts.src, scripts);
 }
 
+const devBuild = gulp.series(setSocketPort, scripts);
 const build = gulp.series(setProd, setSocketPort, scripts);
 
 function defaultTask(cb) {
@@ -79,6 +81,7 @@ function defaultTask(cb) {
 
 exports.scripts = scripts;
 exports.watch = watch;
+exports.devBuild = devBuild;
 exports.build = build;
 
 exports.default = defaultTask;
