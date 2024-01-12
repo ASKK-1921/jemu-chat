@@ -22,6 +22,7 @@ const selectedUsers = [];
 const { page } = $('[data-page]')[0].dataset;
 const userLoggedIn = $('body').data('uid');
 // SocketIO_Connection
+const socket = io.connect('https://jemu-chat.com');
 
 // DOM ELEMENTS
 
