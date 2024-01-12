@@ -21,7 +21,9 @@ let onlineUsers = [];
 const selectedUsers = [];
 const { page } = $('[data-page]')[0].dataset;
 const userLoggedIn = $('body').data('uid');
-const socket = io('http://localhost:3000');
+// const socket = io(`http://localhost:3000`);
+// SocketIO_Connection
+const socket = io('http://localhost:8080');
 
 // DOM ELEMENTS
 

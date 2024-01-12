@@ -7,6 +7,7 @@ const webpack = require('webpack-stream');
 const babel = require('gulp-babel');
 const uglify = require('gulp-uglify');
 const rename = require('gulp-rename');
+const replace = require('gulp-replace');
 
 let env = 'development';
 
@@ -33,7 +34,26 @@ const paths = {
 	},
 };
 
-function scripts() {
+function setSocketPort(cb) {
+	let socketPort = 3000;
+	if (env === 'production') {
+		socketPort = 8080;
+	}
+
+	const anchor = '// SocketIO_Connection';
+	const socket3000 = /const socket = io\('http:\/\/localhost:3000'\);\n|\r/gm;
+	const socket8080 = /const socket = io\('http:\/\/localhost:8080'\);\n|\r/gm;
+	gulp
+		.src(paths.scripts.src, { sourcemaps: true })
+		.pipe(replace(socket3000, ''))
+		.pipe(replace(socket8080, ''))
+		.pipe(replace(anchor, `${anchor}\nconst socket = io('http://localhost:${socketPort}');`))
+		.pipe(rename('index.mjs'))
+		.pipe(gulp.dest(paths.scripts.dest));
+	cb();
+}
+
+function compileScripts() {
 	return gulp
 		.src(paths.scripts.src, { sourcemaps: true })
 		.pipe(plumber(onError))
@@ -44,21 +64,18 @@ function scripts() {
 		.pipe(gulp.dest(paths.scripts.dest));
 }
 
-function watch() {
-	gulp.watch(paths.scripts.src, scripts);
-}
-
-const build = gulp.parallel(setProd, scripts);
-
 function defaultTask(cb) {
 	// eslint-disable-next-line no-console
 	console.log('default task called');
 	cb();
 }
 
+const scripts = gulp.series(setSocketPort, compileScripts);
+const watch = gulp.watch(paths.scripts.src, scripts);
+const build = gulp.series(setProd, scripts);
+
 exports.scripts = scripts;
 exports.watch = watch;
-
 exports.build = build;
 
 exports.default = defaultTask;

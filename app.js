@@ -35,7 +35,7 @@ const app = express();
 app.all('*', (req, res, next) => {
 	if (process.env.NODE_ENV === 'production') {
 		// Set strict whitelist of hosts that can access the system
-		const whitelist = ['localhost:3000', 'jabber.ap-northeast-1.elasticbeanstalk.com'];
+		const whitelist = ['localhost:3000', 'jemu-chat.ap-northeast-1.elasticbeanstalk.com/'];
 
 		// Check if current host is whitelisted
 		if (whitelist.includes(req.headers.host)) {
