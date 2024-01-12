@@ -44,7 +44,7 @@ function setSocketPort(cb) {
 
 	// TODO: Update the regex to catch the live domain too
 	const socket3000 = /const socket = io.connect\('http:\/\/localhost:3000'\);\n|\r/gm;
-	const socket8080 = /const socket = io.connect\('http:\/\/jemu-chat.com:8080'\);\n|\r/gm;
+	const socket8080 = /const socket = io.connect\('https:\/\/jemu-chat.com'\);\n|\r/gm;
 
 	gulp
 		.src(paths.scripts.src, { sourcemaps: true })
