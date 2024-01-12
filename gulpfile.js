@@ -1,12 +1,10 @@
 /* eslint-disable node/no-unpublished-require */
-/* eslint-disable import/no-extraneous-dependencies */
-
 const gulp = require('gulp');
+const rename = require('gulp-rename');
 const plumber = require('gulp-plumber');
-const webpack = require('webpack-stream');
 const babel = require('gulp-babel');
 const uglify = require('gulp-uglify');
-const rename = require('gulp-rename');
+const webpack = require('webpack-stream');
 const replace = require('gulp-replace');
 
 let env = 'development';
@@ -53,7 +51,7 @@ function setSocketPort(cb) {
 	cb();
 }
 
-function compileScripts() {
+function scripts() {
 	return gulp
 		.src(paths.scripts.src, { sourcemaps: true })
 		.pipe(plumber(onError))
@@ -64,15 +62,15 @@ function compileScripts() {
 		.pipe(gulp.dest(paths.scripts.dest));
 }
 
-function defaultTask(cb) {
-	// eslint-disable-next-line no-console
-	console.log('default task called');
-	cb();
+function watch() {
+	gulp.watch(paths.scripts.src, scripts);
 }
 
-const scripts = gulp.series(setSocketPort, compileScripts);
-const watch = gulp.watch(paths.scripts.src, scripts);
-const build = gulp.series(setProd, scripts);
+const build = gulp.series(setProd, setSocketPort, scripts);
+
+function defaultTask(cb) {
+	cb();
+}
 
 exports.scripts = scripts;
 exports.watch = watch;
