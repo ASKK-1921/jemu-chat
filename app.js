@@ -90,7 +90,7 @@ app.disable('x-powered-by');
 app.set('view engine', 'pug');
 
 // Set location of public views and static files
-app.set('views', path.join(__dirname, '/views'));
+app.set('views', path.join(__dirname, 'public/views'));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Start a session for the user
@@ -107,7 +107,7 @@ app.use(
 );
 
 // Use morgan in development to show status codes in terminal
-if (process.env.NODE_ENV === 'test') {
+if (process.env.NODE_ENV === 'test' || process.env.NODE_ENV === 'development') {
 	app.use(morgan('dev'));
 }
 
