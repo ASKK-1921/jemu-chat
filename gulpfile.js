@@ -33,19 +33,24 @@ const paths = {
 };
 
 function setSocketPort(cb) {
+	const anchor = '// SocketIO_Connection';
 	let socketPort = 3000;
+	let domain = 'http://localhost';
+
 	if (env === 'production') {
 		socketPort = 8080;
+		domain = 'https://jemu-chat.com';
 	}
 
-	const anchor = '// SocketIO_Connection';
+	// TODO: Update the regex to catch the live domain too
 	const socket3000 = /const socket = io\('http:\/\/localhost:3000'\);\n|\r/gm;
 	const socket8080 = /const socket = io\('http:\/\/localhost:8080'\);\n|\r/gm;
+
 	gulp
 		.src(paths.scripts.src, { sourcemaps: true })
 		.pipe(replace(socket3000, ''))
 		.pipe(replace(socket8080, ''))
-		.pipe(replace(anchor, `${anchor}\nconst socket = io('http://localhost:${socketPort}');`))
+		.pipe(replace(anchor, `${anchor}\nconst socket = io('http://${domain}:${socketPort}');`))
 		.pipe(rename('index.mjs'))
 		.pipe(gulp.dest(paths.scripts.dest));
 	cb();
