@@ -50,7 +50,7 @@ function setSocketPort(cb) {
 		.src(paths.scripts.src, { sourcemaps: true })
 		.pipe(replace(socket3000, ''))
 		.pipe(replace(socket8080, ''))
-		.pipe(replace(anchor, `${anchor}\nconst socket = io('http://${domain}:${socketPort}');`))
+		.pipe(replace(anchor, `${anchor}\nconst socket = io('${domain}:${socketPort}');`))
 		.pipe(rename('index.mjs'))
 		.pipe(gulp.dest(paths.scripts.dest));
 	cb();

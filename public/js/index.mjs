@@ -22,7 +22,6 @@ const selectedUsers = [];
 const { page } = $('[data-page]')[0].dataset;
 const userLoggedIn = $('body').data('uid');
 // SocketIO_Connection
-const socket = io('http://localhost:8080');
 
 // DOM ELEMENTS
 
