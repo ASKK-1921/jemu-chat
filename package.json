@@ -1,5 +1,5 @@
 {
-	"name": "jabber",
+	"name": "jemu-chat",
 	"version": "1.0.0",
 	"description": "A novel and honest social platform",
 	"main": "app.js",
