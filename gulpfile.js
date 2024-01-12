@@ -34,11 +34,11 @@ const paths = {
 
 function setSocketPort(cb) {
 	const anchor = '// SocketIO_Connection';
-	let socketPort = 3000;
+	let socketPort = ':3000';
 	let domain = 'http://localhost';
 
 	if (env === 'production') {
-		socketPort = 8080;
+		socketPort = '';
 		domain = 'https://jemu-chat.com';
 	}
 
@@ -51,7 +51,7 @@ function setSocketPort(cb) {
 		.pipe(replace(socket3000, ''))
 		.pipe(replace(socket8080, ''))
 		// .pipe(replace(anchor, `${anchor}\nconst socket = io('${domain}:${socketPort}');`))
-		.pipe(replace(anchor, `${anchor}\nconst socket = io.connect('${domain}:${socketPort}');`))
+		.pipe(replace(anchor, `${anchor}\nconst socket = io.connect('${domain}${socketPort}');`))
 		.pipe(rename('index.mjs'))
 		.pipe(gulp.dest(paths.scripts.dest));
 	cb();
