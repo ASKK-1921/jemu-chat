@@ -25,7 +25,6 @@ const db = () => {
 	}
 	// Use the test database
 	if (process.env.NODE_ENV === 'test') {
-		console.log('Set the env to test');
 		return process.env.TEST_DB.replace('<PASSWORD>', process.env.TEST_DB_PASSWORD);
 	}
 	// Use the production database
