@@ -88,7 +88,6 @@ app.use(helmet.hsts({ maxAge: 63072000, includeSubDomains: true }));
 app.disable('x-powered-by');
 
 // Set render engines
-// app.set('view engine', 'ejs');
 app.set('view engine', 'pug');
 
 // Set location of public views and static files
