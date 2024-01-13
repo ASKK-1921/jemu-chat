@@ -70,6 +70,7 @@ app.use(
 			fontSrc: ["'self'", 'https:', 'http:', 'data:'],
 			scriptSrc: ["'self'", (req, res) => `'nonce-${res.locals.nonce}'`, 'https:', 'http:', 'blob:'],
 			styleSrc: ["'self'", "'unsafe-inline'", 'https:', 'http:'],
+			imgSrc: ["'self'", 'https: data:'],
 		},
 	})
 );

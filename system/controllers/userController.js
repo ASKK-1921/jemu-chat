@@ -1,14 +1,28 @@
 /* eslint-disable no-console */
 // DEPENDENCIES
 const multer = require('multer');
-const path = require('path');
-const fs = require('fs');
+const sharp = require('sharp');
 const Notification = require('../models/notificationModel');
 const catchAsync = require('../utils/catchAsync');
+const AppError = require('../utils/appError');
 const User = require('../models/userModel');
+const s3Upload = require('../utils/s3Upload');
 
 // CONTROLLER FUNCTIONS
-const upload = multer({ dest: 'public/uploads/images/' });
+const multerStorage = multer.memoryStorage();
+
+const multerFilter = (req, file, cb) => {
+	if (file.mimetype.startsWith('image')) {
+		cb(null, true);
+	} else {
+		cb(new AppError('(E-28) Incorrect file type, please upload only images or PDF files.', 400));
+	}
+};
+
+const upload = multer({
+	storage: multerStorage,
+	fileFilter: multerFilter,
+});
 
 // EXPORTS
 // Get a single user
@@ -129,23 +143,16 @@ exports.updateImageData = catchAsync(async (req, res, next) => {
 		return res.sendStatus(400);
 	}
 
-	const filePath = `/uploads/images/${req.file.filename}.png`;
-	const tempPath = req.file.path;
-	const targetPath = path.join(__dirname, `../../public/${filePath}`);
+	const filePath = `userimages`;
 
-	fs.rename(tempPath, targetPath, async (error) => {
-		if (error !== null) {
-			console.log(error);
-			return res.sendStatus(400);
-		}
-		req.session.user = await User.findByIdAndUpdate(
-			req.session.user._id,
-			{
-				[imageType]: filePath,
-			},
-			{ new: true }
-		);
+	const fileName = `${req.session.user._id}_${imageType}`;
 
-		res.sendStatus(204);
-	});
+	const data = await sharp(req.file.buffer).toFormat('png').png({ quality: 90 });
+
+	const destination = `${filePath}/${fileName}.png`;
+
+	await s3Upload(data, destination, req.file.mimetype);
+
+	req.session.user = await User.findByIdAndUpdate(req.session.user._id, { [imageType]: destination }, { new: true });
+	res.sendStatus(204);
 });

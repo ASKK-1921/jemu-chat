@@ -1,4 +1,4 @@
-import { chatRoutesUrl, messageRoutesUrl } from './apiRoutes.mjs';
+import { chatRoutesUrl, messageRoutesUrl, s3Url } from './apiRoutes.mjs';
 // eslint-disable-next-line import/no-cycle
 import { markAllMessagesAsRead } from './commonFunctions.mjs';
 
@@ -46,7 +46,7 @@ const createMessageHtml = (message, nextMessage, lastSenderId) => {
 
 	if (isLast) {
 		liClassName += ' last';
-		profileImage = `<img src=${sender.profilePicture} />`;
+		profileImage = `<img src='${s3Url}/${sender.profilePicture}' />`;
 	}
 
 	if (!isMine) {

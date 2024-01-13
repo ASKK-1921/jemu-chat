@@ -17,7 +17,7 @@ mixin createReplyModal(userLoggedIn)
           #originalPostContainer
           .postFormContainer
             .userImageContainer
-              img(src=userLoggedIn.profilePicture, alt="User's profile picture")
+              img(src=`${process.env.S3_URL}/${userLoggedIn.profilePicture}`, alt="User's profile picture")
             .textareaContainer
               textarea#replyTextarea(placeholder="What's up?")
         .modal-footer
@@ -130,7 +130,7 @@ mixin createChatImage(chatData, userLoggedIn)
         - continue
       else if i >= maximumImagesToShow
         - break
-      img(src=user.profilePicture, alt="User profile picture", title=user.firstName)
+      img(src=`${process.env.S3_URL}/${user.profilePicture}`, alt="User profile picture", title=user.firstName)
       - i++
 
 mixin chatNameModal(chat)
@@ -153,7 +153,7 @@ mixin icon(name)
 mixin myDetailsArea()
   #myDetailsArea
     .userImageContainer
-      img(src=userLoggedIn.profilePicture alt='profile picture')
+      img(src=`${process.env.S3_URL}/${userLoggedIn.profilePicture}` alt='profile picture')
     .userDetailsContainer
       .header
         span.myName #{userLoggedIn.firstName}

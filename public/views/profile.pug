@@ -10,12 +10,12 @@ block content
       .coverPhotoSection
         .coverPhotoContainer
           if profileUser.coverPhoto
-            img(src=profileUser.coverPhoto, alt='User cover photo')
+            img(src=`${process.env.S3_URL}/${profileUser.coverPhoto}`, alt='User cover photo')
           if profileUser._id == activeUser._id
             button.coverPhotoButton(data-bs-toggle='modal', data-bs-target='#coverPhotoUploadModalCenter')
               +icon('cameraswitch')
         .userImageContainer
-          img(src=profileUser.profilePicture, alt="User Profile Image")
+          img(src=`${process.env.S3_URL}/${profileUser.profilePicture}`, alt="User Profile Image")
           if profileUser._id == activeUser._id
             button.profilePictureButton(data-bs-toggle='modal', data-bs-target='#imageUploadModalCenter')
               +icon('cameraswitch')

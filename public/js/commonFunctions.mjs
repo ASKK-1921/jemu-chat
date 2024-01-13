@@ -1,4 +1,4 @@
-import { chatRoutesUrl, notificationRoutesUrl } from './apiRoutes.mjs';
+import { chatRoutesUrl, notificationRoutesUrl, s3Url } from './apiRoutes.mjs';
 // eslint-disable-next-line import/no-cycle
 import { addMessagesHtmlToPage, createMessageHtml, scrollToBottom } from './chatHandler.mjs';
 
@@ -112,7 +112,7 @@ const createPostHtml = (postData, largeFont = false) => {
             </div>
             <div class='mainContentContainer'>
               <div class='userImageContainer'>
-                <img src='${postedBy.profilePicture}'/>
+                <img src='${s3Url}/${postedBy.profilePicture}'/>
               </div>
               <div class='postContentContainer'>
                 <div class='pinnedPostText'>${pinnedPostText}</div>
@@ -200,7 +200,7 @@ const createUserHtml = (userData, showFollowButton) => {
 
 	return `<div class='user'>
             <div class='userImageContainer'>
-              <img src='${userData.profilePicture}' alt='profile picture'>
+              <img src='${s3Url}/${userData.profilePicture}' alt='profile picture'>
 							<span id='${userData._id}_status' class='userStatusBadge'></span>
             </div>
             <div class='userDetailsContainer'>
@@ -249,7 +249,7 @@ const getUserChatImageElement = (user) => {
 		// eslint-disable-next-line no-alert
 		return alert('User passed into function is invalid');
 	}
-	return `<img src="${user.profilePicture}" alt='User profile picture'/>`;
+	return `<img src="${s3Url}/${user.profilePicture}" alt='User profile picture'/>`;
 };
 
 const getChatImageElements = (chatData) => {
@@ -410,7 +410,7 @@ const createNotificationHtml = (notification) => {
 
 	return `<a href='${url}' class='resultsListItem notification ${className}' data-id='${notification._id}'>
             <div class='resultsImageContainer'>
-              <img src='${userFrom.profilePicture}' alt='User profile picture' />
+              <img src='${s3Url}/${userFrom.profilePicture}' alt='User profile picture' />
             </div>
             <div class='resultsDetailsContainer ellipsis'>
               <span class='ellipsis'>${notificationMessage}</span>
