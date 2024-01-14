@@ -16,28 +16,28 @@ html(lang="en")
       .row
         nav.col-auto
           +myDetailsArea()
-          a(href="/")
+          a(href="/" class=(pageFileForJs === 'home' ? 'currentPage' : ''))
             +icon('home')
             span.navText Home
-          a(href="/profile")
+          a(href="/profile" class=(pageFileForJs === 'profile' ? 'currentPage' : ''))
             +icon('person')
             span.navText Profile
-          a#notificationsLink(href="/notifications")
+          a#notificationsLink(href="/notifications" class=(pageFileForJs === 'notifications' ? 'currentPage' : ''))
             +icon('notifications')
             span.navText Notifications
             span#notificationsBadge
-          a#messagesLink(href="/inbox")
-            +icon('mail')
-            span.navText Mail
+          a#messagesLink(href="/chat" class=(pageFileForJs === 'inbox' && pageTitle === 'Chats' ? 'currentPage' : ''))
+            +icon('chat')
+            span.navText Chat
             span#messagesBadge
-          a#groupsLink(href="/groups")
+          a#groupsLink(href="/groups" class=(pageFileForJs === 'inbox' && pageTitle === 'Groups' ? 'currentPage' : ''))
             +icon('forum')
             span.navText Groups
             span#groupsBadge
-          a(href="/#")
+          a(href="/#"  class=(pageFileForJs === 'settings' ? 'currentPage' : ''))
             +icon('settings')
             span.navText Settings
-          a(href="/search")
+          a(href="/search" class=(pageFileForJs === 'search' ? 'currentPage' : ''))
             +icon('search')
             span.navText Search
           a(href="/logout")
@@ -53,6 +53,7 @@ html(lang="en")
           .titleContainer
             h1 Contacts
           .contactList
+            //- TODO: Make this an area for most liked, most shared, etc
     #notificationsList
     
     script(src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js" integrity="sha512-9KkIqdfN7ipEW6B6k+Aq20PV31bjODg4AA52W+tYtAE0jE0kMx49bjJ3FgvS56wzmyfMUHbQ4Km2b7l9+Y/+Eg==" crossorigin="anonymous" referrerpolicy="no-referrer")

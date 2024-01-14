@@ -63,7 +63,7 @@ const sharePost = (postId, button, userLoggedIn) => {
 		url: `${postRoutesUrl}/${postId}/share`,
 		type: 'POST',
 		success: (data) => {
-			button.find('span').text(data.shareUsers.length || '');
+			button.next('.shareButtonCount').text(data.shareUsers.length || '');
 			if (data.shareUsers.includes(userLoggedIn)) {
 				button.addClass('active');
 				emitNotification(data.postedBy);

@@ -161,6 +161,8 @@ exports.getInboxPage = (req, res, next) => {
 
 	if (payload.inboxType === 'groups') {
 		payload.pageTitle = 'Groups';
+	} else if (payload.inboxType === 'chat') {
+		payload.pageTitle = 'Chats';
 	}
 
 	renderPage(req, res, 200, 'inbox', payload);

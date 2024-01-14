@@ -22,7 +22,7 @@ const selectedUsers = [];
 const { page } = $('[data-page]')[0].dataset;
 const userLoggedIn = $('body').data('uid');
 // SocketIO_Connection
-const socket = io.connect('https://jemu-chat.com');
+const socket = io.connect('http://localhost:3000');
 
 // DOM ELEMENTS
 
@@ -130,6 +130,10 @@ $('#submitPostButton, #submitReplyButton').click((event) => {
 	}
 
 	commonHandler.submitPostOrReply(postData, textbox, button);
+});
+
+$('#siteLogoArea').click(() => {
+	window.location.href = '/profile';
 });
 
 $('#createChatButton').click(() => {
