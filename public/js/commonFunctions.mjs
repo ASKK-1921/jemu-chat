@@ -9,26 +9,33 @@ const timeDifference = (current, previous) => {
 	const msPerHour = msPerMinute * 60;
 	const msPerDay = msPerHour * 24;
 	const msPerMonth = msPerDay * 30;
-	const msPerYear = msPerDay * 365;
+	// const msPerYear = msPerDay * 365;
 
 	const elapsed = current - previous;
+
+	const options = {
+		year: 'numeric',
+		month: 'short',
+		day: 'numeric',
+	};
 
 	if (elapsed < msPerMinute) {
 		return 'Just now';
 	}
 	if (elapsed < msPerHour) {
-		return `${Math.round(elapsed / msPerMinute)} minutes ago`;
+		return `${Math.round(elapsed / msPerMinute)}m`;
 	}
 	if (elapsed < msPerDay) {
-		return `${Math.round(elapsed / msPerHour)} hours ago`;
+		return `${Math.round(elapsed / msPerHour)}h`;
 	}
 	if (elapsed < msPerMonth) {
-		return `${Math.round(elapsed / msPerDay)} days ago`;
+		return `${Math.round(elapsed / msPerDay)}d`;
 	}
-	if (elapsed < msPerYear) {
-		return `${Math.round(elapsed / msPerMonth)} months ago`;
-	}
-	return `${Math.round(elapsed / msPerYear)} years ago`;
+	// if (elapsed < msPerYear) {
+	// 	// return `${Math.round(elapsed / msPerMonth)}M`;
+	// }
+	return previous.toLocaleDateString('en-GB', options);
+	// return `${Math.round(elapsed / msPerYear)}Y`;
 };
 
 const getPostIdFromElement = (element) => {
@@ -98,6 +105,7 @@ const createPostHtml = (postData, largeFont = false) => {
 			dataTarget = '#unpinPostModalCenter';
 			pinnedPostText = `<span class='material-symbols-outlined'>push_pin</span> <span>Pinned post</span>`;
 		}
+		// TODO: Maybe put these in a drop-down menu to save on space, especially on mobile
 		buttons = `<button class='pinButton ${pinnedClass}' data-id='${postData._id}' data-bs-toggle='modal' data-bs-target='${dataTarget}'>
                   <span class='material-symbols-outlined'>push_pin</span>
 								</button>
