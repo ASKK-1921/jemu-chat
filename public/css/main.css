@@ -1,7 +1,20 @@
 /* Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Chakra+Petch&family=Russo+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Viga&display=swap');
 
 :root {
+  --jemuGrey: #B9BBBF;
+  --jemuBrown: #644C60;
+  --jemuBlue: #38B4E0;
+  --jemuBlueTransparent: #38b4e033;
+  --jemuBlueDark: #3A425E;
+  --jemuBlack: #000000;
+  --jemuBlackTransparent: #adb5bd;
+  --jemuButtonActive: #4274f6;
+  --jemuButtonDisabled: #44454680;
+  --jemuYellow: #DCF763;
+  --jemuRed: #E2225E;
+
   --purple: #5852F2;
   --purpleDark: #2C2973;
   --purpleTransparent: #555BD957;
@@ -19,7 +32,7 @@
   --greyText: #657786;
   --greyButtonText: #00000057;
   --buttonhoverbg: #d4edff;
-  --red: #E2225E;
+  
   --redBackground: #e2225e1a;
   --green: #17BF63;
   --greenBackground: #17bf631a;
@@ -37,7 +50,7 @@
 .material-symbols-outlined {
   font-variation-settings:
   'FILL' 0,
-  'wght' 700,
+  'wght' 500,
   'GRAD' 0,
   'opsz' 24;
   display: flex;
@@ -72,7 +85,7 @@ h1 {
   margin: 0;
 }
 
-#myDetailsArea {
+#siteLogoArea {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -80,62 +93,66 @@ h1 {
   padding-top: var(--spacing);
   padding-bottom: var(--spacing);
   border-bottom: 1px solid var(--blueRobinEgg);
+  cursor: pointer;
 }
 
-#myDetailsArea .header {
-  padding-top: 5px;
+#siteLogoArea .header {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-#myDetailsArea .header span {
+#siteLogoArea .header span {
   padding: 0;
   pointer-events: none;
 }
 
-#myDetailsArea .myName {
-  color: var(--yellow);
+#siteLogoArea .siteName {
+  color: var(--jemuYellow);
   overflow: hidden;
 }
 
-#myDetailsArea .userImageContainer {
+#siteLogoArea .siteName::after {
+  content: '';
+}
+
+/* #siteLogoArea .userImageContainer {
   border: 2px solid var(--blueRobinEgg);
   border-radius: 50%;
-}
+} */
 
 
 nav {
-  background: linear-gradient(.25turn, var(--purple), 90%, white);
+  background: var(--jemuBlueDark);
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   height: 100%;
-  font-family: 'Russo One', sans-serif;
+  font-family: 'Viga', sans-serif;
 }
 
 nav a {
   position: relative;
   padding: 10px;
-  font-size: 12px;
+  font-size: 15px;
   width: 100%;
   min-width: 55px;
   height: 55px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--yellow);
+  color: white;
   margin-top: 5px;
 }
 
-nav a:hover {
-  background-color: var(--blueRobinEgg);
-  color: var(--purple);
-  border-radius: 15px;
+nav a:hover, nav a.currentPage {
+  background-color: var(--jemuBlue);
+  color: var(--jemuBlack);
+  border-radius: 5px;
 }
 
 nav a:last-child:hover {
-  color: var(--red);
+  color: var(--jemuRed);
 }
 
 .navText {
@@ -150,6 +167,9 @@ nav a:last-child:hover {
   }
   nav a {
     justify-content:flex-start;
+  }
+  #siteLogoArea .siteName::after {
+    content: '-Chat';
   }
 }
 
@@ -168,6 +188,10 @@ button {
   background-color: transparent;
   border: none;
   color: var(--greyButtonText);
+}
+
+button:hover {
+  color: var(--jemuBlack);
 }
 
 button i, button span {
@@ -210,6 +234,7 @@ nav a.blue {
   align-items: center;
   border-bottom: 1px solid var(--blueRobinEgg);
   flex-shrink: 0;
+  font-family: 'Viga', sans-serif;
 }
 
 .titleContainer h1 {
@@ -219,7 +244,7 @@ nav a.blue {
 .postFormContainer {
   display: flex;
   padding: var(--spacing);
-  border-bottom: 5px solid var(--blueRobinEgg);
+  border-bottom: 5px solid var(--jemuBlue);
   flex-shrink: 0;
 }
 
@@ -233,7 +258,7 @@ nav a.blue {
   padding: 0 0 var(--spacing) 0;
 }
 
-.userImageContainer {
+.userImageContainer, .logoImageContainer {
   width: 50px;
   height: 50px;
 }
@@ -248,6 +273,10 @@ nav a.blue {
   background-color: #ffffff;
 }
 
+.logoImageContainer img {
+  width: 100%;
+}
+
 .textareaContainer {
   flex: 1;
 }
@@ -257,19 +286,23 @@ nav a.blue {
   border: none;
   resize: none;
   font-size: 19px;
+  background-color: var(--jemuBlueTransparent);
+  border-radius: 10px;
+  padding: 5px 10px;
 }
 
 #submitPostButton {
-  background-color: var(--purple);
+  background-color: var(--jemuButtonActive);
   color: #ffffff;
   border: none;
   border-radius: 40px;
   padding: 7px 15px;
   float: right;
+  font-family: 'Viga', sans-serif;
 }
 
 #submitPostButton:disabled {
-  background-color: var(--blueLight);
+  background-color: var(--jemuButtonDisabled);
 }
 
 .post {
@@ -299,7 +332,7 @@ nav a.blue {
 }
 
 .username, .date {
-  color: var(--blueRobinEgg);
+  color: var(--jemuButtonActive);
 }
 
 .postFooter {
@@ -332,11 +365,11 @@ nav a.blue {
 }
 
 .postButtonContainer.red button.active {
-  color: var(--red);
+  color: var(--jemuRed);
 }
 
 .postButtonContainer.red button:first-child:hover {
-  color: var(--red);
+  color: var(--jemuRed);
   background-color: var(--redBackground);
 }
 
@@ -353,13 +386,14 @@ nav a.blue {
   display: flex;
   align-items: center;
   padding-left: 5px;
+  font-family: 'Viga', sans-serif;
 }
 
 .postActionContainer {
   padding-left: calc(50px + var(--spacing));
   font-size: 13px;
   color: var(--greyText);
-  margin-bottom: var(--spacing);
+  /* margin-bottom: var(--spacing); */
 }
 
 .replyFlag {
@@ -375,7 +409,7 @@ nav a.blue {
 }
 
 .post.largeFont {
-  background-color: var(--blueHighlight);
+  background-color: var(--jemuBlueTransparent);
 }
 
 .postContentContainer .header {
@@ -385,6 +419,7 @@ nav a.blue {
 
 .postContentContainer .header .date {
   flex: 1;
+  color: var(--jemuButtonDisabled);
 }
 
 .errorMessage {
@@ -469,6 +504,7 @@ nav a.blue {
   display: flex;
   border-bottom: 1px solid var(--blueRobinEgg);
   flex-shrink: 0;
+  font-family: 'Viga', sans-serif;
 }
 
 .tab {
@@ -530,7 +566,7 @@ nav a.blue {
   background: var(--violet);
   padding: 5px;
   border-radius: 50%;
-  color: var(--yellow);
+  color: var(--jemuYellow);
 }
 
 .userImageContainer:hover .profilePictureButton, .coverPhotoSection:hover .coverPhotoButton {
@@ -565,7 +601,7 @@ nav a.blue {
 }
 
 .pinButton.active {
-  color: var(--purple);
+  color: var(--jemuButtonActive);
 }
 
 .pinButton.active span {
@@ -666,7 +702,7 @@ nav a.blue {
 }
 
 .resultsListItem:hover {
-  background-color: var(--blueRobinEgg) !important;
+  background-color: var(--jemuBlue) !important;
 }
 
 .resultsDetailsContainer {
@@ -926,7 +962,7 @@ nav a.blue {
 }
 
 .resultsListItem.active {
-  background-color: var(--blueBackground);
+  background-color: var(--jemuBlueTransparent);
 }
 
 .resultsListItem.notification * {
@@ -966,14 +1002,14 @@ nav a.blue {
 
 #notificationsBadge, #messagesBadge, #groupsBadge {
   background-color: var(--redBadges);
-  height: 25px;
-  width: 25px;
+  height: 20px;
+  width: 20px;
   border-radius: 50%;
   position: absolute;
   top: 0;
   right: 0;
   color: white;
-  font-size: 18px;
+  font-size: 15px;
   display: flex;
   align-items: center;
   justify-content: center;

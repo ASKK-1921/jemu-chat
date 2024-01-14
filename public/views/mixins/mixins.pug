@@ -150,11 +150,19 @@ mixin chatNameModal(chat)
 mixin icon(name)
   span.material-symbols-outlined #{name}
 
+//- mixin myDetailsArea()
+//-   #myDetailsArea
+//-     .userImageContainer
+//-       img(src=`${process.env.S3_URL}/${userLoggedIn.profilePicture}` alt='profile picture')
+//-     .userDetailsContainer
+//-       .header
+//-         span.myName #{userLoggedIn.firstName}
+//-         span.username @#{userLoggedIn.username}
+
 mixin myDetailsArea()
-  #myDetailsArea
-    .userImageContainer
-      img(src=`${process.env.S3_URL}/${userLoggedIn.profilePicture}` alt='profile picture')
-    .userDetailsContainer
+  #siteLogoArea
+    .logoImageContainer
+      img(src="/images/logo.png" alt='logo')
+    .siteDetailsContainer
       .header
-        span.myName #{userLoggedIn.firstName}
-        span.username @#{userLoggedIn.username}
+        span.siteName Jemu

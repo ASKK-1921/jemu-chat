@@ -1,5 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Viga&display=swap');
+
 body {
-  background-color: #5852F2;
+  background-color: #3A425E;
 }
 
 .wrapper {
@@ -22,6 +24,14 @@ body {
   -moz-box-shadow: 0 1px 4px rgba(0,0,0,0.3); 
 }
 
+.loginContainer h1 {
+  font-family: 'Viga', sans-serif;
+  color: black;
+  -webkit-text-fill-color: #DCF763;
+  -webkit-text-stroke: 2px black;
+  
+}
+
 #loginLogo {
   width: 200px;
   height: 200px;
@@ -41,7 +51,7 @@ input[type="text"], input[type="email"], input[type="password"] {
 }
 
 input[type="submit"] {
-  background-color: #dd9b34;
+  background-color: #4274f6;
   color: #ffffff;
   border: none !important;
   border-radius: 2px;
