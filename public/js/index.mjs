@@ -165,8 +165,10 @@ $('#coverPhoto').change((event) => {
 	const input = $(event.target)[0];
 	if (input.files && input.files[0]) {
 		const reader = new FileReader();
+
 		reader.onload = (e) => {
 			const image = document.getElementById('coverPhotoPreview');
+
 			image.src = e.target.result;
 			if (cropper !== undefined) {
 				cropper.destroy();
@@ -182,7 +184,10 @@ $('#coverPhoto').change((event) => {
 });
 
 $('#imageUploadButton').on('click', () => {
-	const canvas = cropper.getCroppedCanvas();
+	const canvas = cropper.getCroppedCanvas({
+		maxWidth: 500,
+		maxHeight: 500,
+	});
 
 	if (canvas == null) {
 		// eslint-disable-next-line no-alert
@@ -200,7 +205,10 @@ $('#imageUploadButton').on('click', () => {
 });
 
 $('#coverPhotoUploadButton').on('click', () => {
-	const canvas = cropper.getCroppedCanvas();
+	const canvas = cropper.getCroppedCanvas({
+		maxWidth: 1000,
+		maxHeight: 562,
+	});
 
 	if (canvas == null) {
 		// eslint-disable-next-line no-alert
