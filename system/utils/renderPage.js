@@ -23,11 +23,14 @@
  */
 module.exports = (req, res, statusCode, page, payload = {}) => {
 	payload.pageTitle = payload.pageTitle || page.charAt(0).toUpperCase() + page.slice(1);
+	payload.pageFileForJs = page;
 
 	if (req.session.user) {
 		payload.userLoggedIn = req.session.user;
 		payload.userLoggedInJs = JSON.stringify(req.session.user._id);
-		payload.pageFileForJs = page;
+	} else {
+		payload.userLoggedIn = 0;
+		payload.userLoggedInJs = 0;
 	}
 
 	return res.status(statusCode).render(`${page}`, payload);

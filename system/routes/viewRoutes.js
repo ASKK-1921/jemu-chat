@@ -8,7 +8,7 @@ router.route('/register').get(viewController.getRegisterPage).post(authControlle
 router.route('/login').get(viewController.getLoginPage).post(authController.login);
 router.get('/logout', authController.logout);
 
-router.use(authController.requireLogin);
+// router.use(authController.requireLogin);
 router.get('/', viewController.getHomePage);
 router.get('/profile', viewController.getProfilePage);
 router.get('/profile/:username', viewController.getUserProfilePage);

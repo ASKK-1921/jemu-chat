@@ -21,30 +21,35 @@ html(lang="en")
           a(href="/" class=(pageFileForJs === 'home' ? 'currentPage' : ''))
             +icon('home')
             span.navText Home
-          a(href="/profile" class=(pageFileForJs === 'profile' ? 'currentPage' : ''))
-            +icon('person')
-            span.navText Profile
-          a#notificationsLink(href="/notifications" class=(pageFileForJs === 'notifications' ? 'currentPage' : ''))
-            +icon('notifications')
-            span.navText Notifications
-            span#notificationsBadge
-          a#messagesLink(href="/chat" class=(pageFileForJs === 'inbox' && pageTitle === 'Chats' ? 'currentPage' : ''))
-            +icon('chat')
-            span.navText Chat
-            span#messagesBadge
-          a#groupsLink(href="/groups" class=(pageFileForJs === 'inbox' && pageTitle === 'Groups' ? 'currentPage' : ''))
-            +icon('forum')
-            span.navText Groups
-            span#groupsBadge
-          a(href="/#"  class=(pageFileForJs === 'settings' ? 'currentPage' : ''))
-            +icon('settings')
-            span.navText Settings
-          a(href="/search" class=(pageFileForJs === 'search' ? 'currentPage' : ''))
-            +icon('search')
-            span.navText Search
-          a(href="/logout")
-            +icon('logout')
-            span.navText Logout
+          if (userLoggedIn)
+            a(href="/profile" class=(pageFileForJs === 'profile' ? 'currentPage' : ''))
+              +icon('person')
+              span.navText Profile
+            a#notificationsLink(href="/notifications" class=(pageFileForJs === 'notifications' ? 'currentPage' : ''))
+              +icon('notifications')
+              span.navText Notifications
+              span#notificationsBadge
+            a#messagesLink(href="/chat" class=(pageFileForJs === 'inbox' && pageTitle === 'Chats' ? 'currentPage' : ''))
+              +icon('chat')
+              span.navText Chat
+              span#messagesBadge
+            a#groupsLink(href="/groups" class=(pageFileForJs === 'inbox' && pageTitle === 'Groups' ? 'currentPage' : ''))
+              +icon('forum')
+              span.navText Groups
+              span#groupsBadge
+            a(href="/#"  class=(pageFileForJs === 'settings' ? 'currentPage' : ''))
+              +icon('settings')
+              span.navText Settings
+            a(href="/search" class=(pageFileForJs === 'search' ? 'currentPage' : ''))
+              +icon('search')
+              span.navText Search
+            a(href="/logout")
+              +icon('logout')
+              span.navText Logout
+          else
+            a#loginLink(href="/login")
+              +icon('login')
+              span.navText Login
         .mainSectionContainer.col.col-md-7
           .titleContainer
             h1 #{pageTitle}

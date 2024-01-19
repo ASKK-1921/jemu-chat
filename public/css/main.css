@@ -155,6 +155,10 @@ nav a:last-child:hover {
   color: var(--jemuRed);
 }
 
+nav a#loginLink:hover {
+  color: var(--jemuYellow);
+}
+
 .navText {
   display:none;
   margin-left: 5px;
