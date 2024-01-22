@@ -1,7 +1,16 @@
 const { Upload } = require('@aws-sdk/lib-storage');
 const { S3Client } = require('@aws-sdk/client-s3');
 
+/**
+ * Manage uploads to the S3 storage bucket
+ * @param {object} data The file to be uploaded
+ * @param {string} destination Directory where the file should be saved
+ * @param {string} mimeType The content type of the file
+ */
 module.exports = (data, destination, mimeType) => {
+	console.log(typeof data);
+	console.log(typeof destination);
+	console.log(typeof mimeType);
 	return new Upload({
 		client: new S3Client({
 			credentials: {
