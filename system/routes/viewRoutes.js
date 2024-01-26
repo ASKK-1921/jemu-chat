@@ -6,6 +6,7 @@ const router = express.Router();
 
 router.route('/register').get(viewController.getRegisterPage).post(authController.register);
 router.route('/login').get(viewController.getLoginPage).post(authController.login);
+router.route('/login/:id/:activationToken').get(viewController.getActivateLoginPage).post(authController.activate);
 router.get('/logout', authController.logout);
 
 // router.use(authController.requireLogin);

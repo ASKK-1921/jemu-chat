@@ -7,8 +7,11 @@ block content
     form(method="post") 
 
       p.errorMessage #{errorMessage}
+      
+      if activateLogin
+        p Enter your password to confirm your email and log in
 
-      input(type="text", name="logUsername", placeholder="Username or email", required="")
+      input(type="text", name="logUsername", placeholder="Username or email", value=username, style=activateLogin ? "display: none" : "", required="")
       input(type="password", name="logPassword", placeholder="Password", required="")
       input(type="submit", value="Login")
     a(href="/register") Need an account? Register here.

@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
+const crypto = require('crypto');
 const validator = require('validator');
 
 const userSchema = new mongoose.Schema(
@@ -44,6 +45,25 @@ const userSchema = new mongoose.Schema(
 				},
 				message: 'Passwords do not match',
 			},
+		},
+		passwordChangedAt: {
+			type: Date,
+		},
+		passwordResetToken: {
+			type: String,
+		},
+		passwordResetExpires: {
+			type: Date,
+		},
+		accountCreated: {
+			type: Date,
+		},
+		accountActivationToken: {
+			type: String,
+		},
+		active: {
+			type: Boolean,
+			default: false,
 		},
 		profilePicture: {
 			type: String,
@@ -107,9 +127,24 @@ userSchema.pre('save', async function (next) {
 	next();
 });
 
+userSchema.pre('save', function (next) {
+	if (this.isNew) {
+		this.accountCreated = Date.now();
+		this.createAccountActivationToken();
+	}
+	next();
+});
+
 // METHODS
 userSchema.methods.correctPassword = async function (enteredPassword, userPassword) {
 	return await bcrypt.compare(enteredPassword, userPassword);
+};
+
+userSchema.methods.createAccountActivationToken = function () {
+	const activationToken = crypto.randomBytes(32).toString('hex');
+	this.accountActivationToken = crypto.createHash('sha256').update(activationToken).digest('hex');
+
+	return activationToken;
 };
 
 const User = mongoose.model('User', userSchema);

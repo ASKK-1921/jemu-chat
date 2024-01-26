@@ -75,6 +75,18 @@ exports.getLoginPage = (req, res, next) => {
 	renderPage(req, res, 200, 'login');
 };
 
+exports.getActivateLoginPage = catchAsync(async (req, res, next) => {
+	const user = await User.findById(req.params.id);
+	const { username } = user;
+
+	const payload = {
+		activateLogin: true,
+		username,
+	};
+
+	renderPage(req, res, 200, 'login', payload);
+});
+
 // Register
 exports.getRegisterPage = (req, res, next) => {
 	renderPage(req, res, 200, 'register');

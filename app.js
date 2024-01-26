@@ -12,6 +12,7 @@ const compression = require('compression');
 // const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
 const hpp = require('hpp');
+const cors = require('cors');
 
 // Utilities
 const AppError = require('./system/utils/appError');
@@ -20,6 +21,7 @@ const AppError = require('./system/utils/appError');
 // Routers
 const viewRoutes = require('./system/routes/viewRoutes');
 const postRoutes = require('./system/routes/postRoutes');
+const mailRoutes = require('./system/routes/mailRoutes');
 const userRoutes = require('./system/routes/userRoutes');
 const notificationRoutes = require('./system/routes/notificationRoutes');
 const chatRoutes = require('./system/routes/chatRoutes');
@@ -136,14 +138,19 @@ app.use(hpp({ whiteList: [] }));
 // Compression for better live performance
 app.use(compression());
 
+const corsOptions = {
+	origin: ['localhost:3000', 'jemu-chat.ap-northeast-1.elasticbeanstalk.com/'],
+};
+
 // Health check route for AWS
 app.use('/healthcheck', (req, res) => {
 	res.status(200).send('ok');
 });
 
 // Declare routers in order to mount them and set routes
+app.use('/api/v1/mailcheck', mailRoutes);
 app.use('/api/v1/posts', postRoutes);
-app.use('/api/v1/users', userRoutes);
+app.use('/api/v1/users', cors(corsOptions), userRoutes);
 app.use('/api/v1/notifications', notificationRoutes);
 app.use('/api/v1/chats', chatRoutes);
 app.use('/api/v1/messages', messageRoutes);
