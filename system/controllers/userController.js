@@ -30,6 +30,10 @@ exports.getUsers = catchAsync(async (req, res, next) => {
 	// Assign values to clear variables
 	let searchObj = req.query;
 
+	if (Object.keys(searchObj).length === 0) {
+		return next(new AppError('Invalid URL', 404));
+	}
+
 	// Set up the search filters if present
 	if (req.query.search !== undefined) {
 		searchObj = {
@@ -42,7 +46,7 @@ exports.getUsers = catchAsync(async (req, res, next) => {
 	}
 
 	// Find the users with the given serach parameters
-	const users = await User.find(searchObj);
+	const users = await User.find(searchObj).select('firstName lastName username followers profilePicture');
 
 	// Send error if no user found
 	if (!users) {
