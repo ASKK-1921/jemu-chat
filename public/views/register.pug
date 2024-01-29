@@ -3,7 +3,7 @@ extends layouts/login-layout.pug
 block content
   .loginContainer
     h1 Register 
-    if activateLogin
+    if confirmEmailPayload
       p Please confirm your email using the link that was sent to you
     else 
       form#registerForm(method="post")
